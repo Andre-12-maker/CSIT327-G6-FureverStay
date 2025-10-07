@@ -1,137 +1,184 @@
-/* style.css - updated customizations */
+/* === FureverStay Style === */
 
+/* Global Colors */
 :root {
-  --brand: #0d6efd;
-  --muted: #6c757d;
-  --bg: #f8f9fa;
-  --modal-bg: #ffffff;
-  --modal-header-bg: #f8f9fa;
-  --btn-pet-owner: #28a745;
-  --btn-pet-sitter: #ffc107;
+  --bg-color: #795959;
+  --modal-bg: #f8c8c8;
+  --modal-input: #d18c8c;
+  --btn-color: #b87c7c;
+  --btn-hover: #a56b6b;
 }
 
-body {
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: white;
+/* Reset */
+body, html {
   margin: 0;
+  padding: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: #fff;
+  height: 100%;
 }
 
-/* Navbar */
-.navbar-brand .logo {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-.brand-name {
-  font-weight: 700;
-  font-size: 1.125rem;
+/* Header */
+.header {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
 }
 
-/* Hero */
-.hero {
-  background: linear-gradient(180deg, rgba(13, 110, 253, 0.04), transparent);
-}
-.hero .hero-img {
-  max-width: 420px;
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(13, 110, 253, 0.08);
-}
-
-/* Features icons */
-.icon {
-  font-size: 2rem;
-}
-
-/* CTA */
-.cta {
-  background: linear-gradient(90deg, var(--brand), #0056d6);
-}
-.text-muted-light {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Footer */
-footer a {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* Modals */
-.modal-content {
-  border-radius: 12px;
-  background: var(--modal-bg);
-  padding: 1rem;
-}
-.modal-header {
-  background: var(--modal-header-bg);
-  border-bottom: none;
-}
-.modal-header .btn-close {
-  background: transparent;
-}
-.modal-body form label {
-  font-weight: 500;
-}
-.modal-body form input {
+.header-buttons button {
+  background-color: var(--modal-bg);
+  color: #000;
+  border: none;
   border-radius: 6px;
-  padding: 0.5rem;
-}
-
-/* Buttons */
-.btn-pet-owner {
-  background-color: var(--btn-pet-owner);
-  color: white;
-}
-.btn-pet-owner:hover {
-  background-color: darkgreen;
-}
-
-.btn-pet-sitter {
-  background-color: var(--btn-pet-sitter);
-  color: white;
-}
-.btn-pet-sitter:hover {
-  background-color: gold;
-}
-
-/* Register Choice Modal */
-#registerChoiceModal .modal-body {
-  padding: 2rem;
-  text-align: center;
-}
-#registerChoiceModal .btn {
-  min-width: 140px;
-  padding: 0.75rem;
+  padding: 0.5rem 1.2rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
-/* Forgot Password Modal */
-#forgotModal .modal-body {
-  padding: 1rem;
+.header-buttons button:hover {
+  background-color: var(--btn-hover);
+  color: #fff;
 }
-#forgotModal input {
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  max-width: 1100px;
+}
+
+.hero-left img.hero-icon {
+  width: 280px;
+  height: auto;
+}
+
+.hero-right {
+  max-width: 600px;
+  text-align: center;
+}
+
+.hero-logo {
+  width: 250px;
+  height: auto;
   margin-bottom: 1rem;
 }
 
-/* OTP Modal */
-#otpModal .modal-body {
-  padding: 1rem;
-  text-align: center;
+.hero-description {
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
 }
-.otp-input {
-  width: 2.5rem;
-  height: 2.5rem;
+
+.hero-images {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.pet-image {
+  width: 250px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* === Modals === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: var(--modal-bg);
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 350px;
   text-align: center;
-  font-size: 1.5rem;
-  margin: 0 0.25rem;
+  color: #000;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.modal-content label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.3rem;
+  color: #000;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: none;
   border-radius: 6px;
-  border: 1px solid var(--muted);
+  background-color: var(--modal-input);
 }
 
-/* Reset Password Modal */
-#resetModal .modal-body {
-  padding: 1rem;
-}
-#resetModal input {
+.modal-content .forgot {
+  font-size: 0.85rem;
+  color: #007bff;
+  display: block;
   margin-bottom: 1rem;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: var(--btn-color);
+  border: none;
+  border-radius: 6px;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.modal-content button:hover {
+  background-color: var(--btn-hover);
+  color: #fff;
+}
+
+.modal-content p {
+  margin-top: 1rem;
+  color: #000;
+}
+
+.modal-content a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.modal-content a:hover {
+  text-decoration: underline;
+}
+
+/* Show Modal (for JS trigger if needed) */
+.modal.show {
+  display: block;
 }
