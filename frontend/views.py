@@ -1,129 +1,136 @@
+import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-import random
+from django.contrib.auth.decorators import login_required
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from frontend.models import Profile
 
-# OTP storage for demo (not persistent)
-OTP_STORAGE = {}
+
+def is_valid_password(password):
+    """Check password complexity rules."""
+    if len(password) < 8:
+        return False
+    if not re.search(r"[A-Z]", password):
+        return False
+    if not re.search(r"[a-z]", password):
+        return False
+    if not re.search(r"[0-9]", password):
+        return False
+    if not re.search(r"[\W_]", password):
+        return False
+    return True
+
+
+def make_unique_username(base_username):
+    """Generate a unique username."""
+    username = base_username
+    counter = 1
+    while User.objects.filter(username=username).exists():
+        username = f"{base_username}{counter}"
+        counter += 1
+    return username
+
 
 def home(request):
-    if request.method == "POST":
-        if "login" in request.POST:
-            username = request.POST.get("username", "").strip()
-            password = request.POST.get("password", "").strip()
-
-            if not username or not password:
-                messages.error(request, "Please fill in both username and password.")
-                return redirect("home")
-
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)
-                messages.success(request, "Logged in successfully.")
-                return redirect("home")
-            else:
-                messages.error(request, "Invalid credentials.")
-                return redirect("home")
-
-        elif "register_owner" in request.POST:
-            username = request.POST.get("ownerUsername", "").strip()
-            email = request.POST.get("ownerEmail", "").strip()
-            password = request.POST.get("ownerPassword", "").strip()
-            pet_name = request.POST.get("ownerPetName", "").strip()
-
-            if not username or not email or not password or not pet_name:
-                messages.error(request, "All fields are required for registration.")
-                return redirect("home")
-
-            if User.objects.filter(username=username).exists():
-                messages.error(request, "Username already exists.")
-                return redirect("home")
-
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user.save()
-            messages.success(request, "Pet Owner registered successfully.")
-            return redirect("home")
-
-        elif "register_sitter" in request.POST:
-            username = request.POST.get("sitterUsername", "").strip()
-            email = request.POST.get("sitterEmail", "").strip()
-            password = request.POST.get("sitterPassword", "").strip()
-            experience = request.POST.get("sitterExperience", "").strip()
-
-            if not username or not email or not password or not experience:
-                messages.error(request, "All fields are required for registration.")
-                return redirect("home")
-
-            if User.objects.filter(username=username).exists():
-                messages.error(request, "Username already exists.")
-                return redirect("home")
-
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user.save()
-            messages.success(request, "Pet Sitter registered successfully.")
-            return redirect("home")
-
     return render(request, "home.html")
 
 
-def forgot_password(request):
+def register_pet_sitter(request):
     if request.method == "POST":
-        email = request.POST.get("email", "").strip()
-        if not email:
-            messages.error(request, "Please enter your email.")
-            return redirect("home")
-
-        if User.objects.filter(email=email).exists():
-            otp = random.randint(1000, 9999)
-            OTP_STORAGE[email] = otp
-            request.session['reset_email'] = email
-            print(f"DEBUG: OTP for {email} is {otp}")
-            messages.success(request, "OTP sent to your email (check console for demo).")
-            return redirect("home")
-        else:
-            messages.error(request, "Email not found.")
-            return redirect("home")
+        return register_user(request, role="pet_sitter")
+    return redirect("home")
 
 
-def verify_otp(request):
+def register_pet_owner(request):
     if request.method == "POST":
-        email = request.session.get("reset_email")
-        entered_otp = request.POST.get("otp", "").strip()
-        if not entered_otp:
-            messages.error(request, "Please enter OTP.")
-            return redirect("home")
-
-        if str(OTP_STORAGE.get(email)) == entered_otp:
-            request.session['otp_verified'] = True
-            messages.success(request, "OTP verified. Please reset your password.")
-            return redirect("home")
-        else:
-            messages.error(request, "Invalid OTP.")
-            return redirect("home")
+        return register_user(request, role="pet_owner")
+    return redirect("home")
 
 
-def reset_password(request):
-    if request.method == "POST":
-        email = request.session.get("reset_email")
-        if not request.session.get("otp_verified"):
-            messages.error(request, "OTP verification required.")
-            return redirect("home")
+def register_user(request, role):
+    name = request.POST.get("username", "").strip()
+    email = request.POST.get("email", "").strip()
+    password = request.POST.get("password", "").strip()
+    confirm_password = request.POST.get("confirm_password", "").strip()
 
-        password = request.POST.get("password", "").strip()
-        confirm_password = request.POST.get("confirm_password", "").strip()
-
-        if not password or not confirm_password:
-            messages.error(request, "Please fill in both password fields.")
-            return redirect("home")
-
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match.")
-            return redirect("home")
-
-        user = User.objects.get(email=email)
-        user.set_password(password)
-        user.save()
-
-        messages.success(request, "Password reset successfully.")
+    # Name validation
+    if not name or len(name) < 2:
+        messages.error(request, "Name must be at least 2 characters.")
         return redirect("home")
+
+    # Email validation
+    try:
+        validate_email(email)
+    except ValidationError:
+        messages.error(request, "Invalid email format.")
+        return redirect("home")
+
+    if User.objects.filter(email=email).exists():
+        messages.error(request, "Email already exists.")
+        return redirect("home")
+
+    # Password rules
+    if not is_valid_password(password):
+        messages.error(
+            request,
+            "Password must be at least 8 characters, "
+            "include uppercase, lowercase, number, and special character."
+        )
+        return redirect("home")
+
+    if password != confirm_password:
+        messages.error(request, "Passwords do not match.")
+        return redirect("home")
+
+    # Create user
+    username = make_unique_username(email.split("@")[0])
+    user = User.objects.create_user(username=username, email=email, password=password)
+    user.first_name = name
+    user.save()
+
+    # Create profile
+    Profile.objects.create(user=user, role=role)
+
+    messages.success(request, "Registration successful! Please login.")
+    return redirect("home")
+
+
+def login_user(request):
+    if request.method == "POST":
+        email = request.POST.get("loginEmail", "").strip()
+        password = request.POST.get("loginPassword", "").strip()
+
+        if not email or not password:
+            messages.error(request, "Please fill in both email and password.")
+            return redirect("home")
+
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, "No account found with this email.")
+            return redirect("home")
+
+        user = authenticate(request, username=user_obj.username, password=password)
+        if user is None:
+            messages.error(request, "Invalid email or password.")
+            return redirect("home")
+
+        login(request, user)
+        messages.success(request, f"Welcome back, {user.first_name or user.username}!")
+        return redirect("dashboard")
+
+    return redirect("home")
+
+
+@login_required(login_url='home')
+def dashboard(request):
+    return render(request, "dashboard.html")
+
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, "You have logged out successfully.")
+    return redirect("home")

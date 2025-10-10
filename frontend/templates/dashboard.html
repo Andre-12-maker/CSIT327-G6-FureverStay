@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | FureverStay{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dashboard-container">
+    <h1>Welcome, {{ user.username }} 🐾</h1>
+    <p class="subtitle">Here’s your FureverStay dashboard.</p>
+
+    <div class="dashboard-grid">
+      <div class="card">
+        <h3>Your Profile</h3>
+        <p>Email: {{ user.email }}</p>
+        <form method="POST" action="{% url 'home' %}">
+          {% csrf_token %}
+          <button type="submit" name="logout" class="logout-btn">Logout</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>My Pets</h3>
+        <p>View and manage your registered pets here.</p>
+        <button class="btn">View Pets</button>
+      </div>
+
+      <div class="card">
+        <h3>Bookings</h3>
+        <p>Check your upcoming stays or book a new one.</p>
+        <button class="btn">View Bookings</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
