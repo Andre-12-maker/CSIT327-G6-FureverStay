@@ -54,7 +54,7 @@ body, html {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #795959, #4f2f2f);
+  background-color: var(--bg-color);
   padding: 0; /* removed padding */
 }
 
@@ -100,6 +100,7 @@ body, html {
   justify-content: flex-start;
   align-items: flex-start;
 }
+
 
 .hero-logo {
   width: 380px;
@@ -156,6 +157,9 @@ body, html {
     width: 90%;
     height: auto;
     margin: 0; /* ensures no padding/margin in responsive view */
+    background: none;
+    background-image: none;
+    background-color: transparent;
   }
 
   .pet-image {

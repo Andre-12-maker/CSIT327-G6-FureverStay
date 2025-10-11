@@ -40,7 +40,7 @@
 <div id="loginModal" class="modal login-modal">
   <div class="modal-content">
     <h2>Login to FureverStay</h2>
-    <form method="POST" action="{% url 'login_user' %}">
+    <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}
       <label for="loginEmail">Email</label>
       <input id="loginEmail" type="email" name="loginEmail" placeholder="Enter your email" required>

@@ -9,8 +9,8 @@ from django.core.exceptions import ValidationError
 from frontend.models import Profile
 
 
+# 🧠 Helper: Validate password strength
 def is_valid_password(password):
-    """Check password complexity rules."""
     if len(password) < 8:
         return False
     if not re.search(r"[A-Z]", password):
@@ -24,8 +24,8 @@ def is_valid_password(password):
     return True
 
 
+# 🧠 Helper: Generate unique username based on email prefix
 def make_unique_username(base_username):
-    """Generate a unique username."""
     username = base_username
     counter = 1
     while User.objects.filter(username=username).exists():
@@ -34,34 +34,38 @@ def make_unique_username(base_username):
     return username
 
 
+# 🏠 Home Page
 def home(request):
     return render(request, "home.html")
 
 
-def register_pet_sitter(request):
-    if request.method == "POST":
-        return register_user(request, role="pet_sitter")
-    return redirect("home")
-
-
+# 🐾 Register Pet Owner
 def register_pet_owner(request):
     if request.method == "POST":
-        return register_user(request, role="pet_owner")
+        return register_user(request, role="owner")
     return redirect("home")
 
 
+# 🐶 Register Pet Sitter
+def register_pet_sitter(request):
+    if request.method == "POST":
+        return register_user(request, role="sitter")
+    return redirect("home")
+
+
+# 🔐 Universal Register Function
 def register_user(request, role):
     name = request.POST.get("username", "").strip()
     email = request.POST.get("email", "").strip()
     password = request.POST.get("password", "").strip()
     confirm_password = request.POST.get("confirm_password", "").strip()
 
-    # Name validation
+    # ✅ Validate name
     if not name or len(name) < 2:
         messages.error(request, "Name must be at least 2 characters.")
         return redirect("home")
 
-    # Email validation
+    # ✅ Validate email
     try:
         validate_email(email)
     except ValidationError:
@@ -72,12 +76,11 @@ def register_user(request, role):
         messages.error(request, "Email already exists.")
         return redirect("home")
 
-    # Password rules
+    # ✅ Validate password
     if not is_valid_password(password):
         messages.error(
             request,
-            "Password must be at least 8 characters, "
-            "include uppercase, lowercase, number, and special character."
+            "Password must be at least 8 characters, include uppercase, lowercase, number, and special character."
         )
         return redirect("home")
 
@@ -85,19 +88,31 @@ def register_user(request, role):
         messages.error(request, "Passwords do not match.")
         return redirect("home")
 
-    # Create user
+    # ✅ Create user
     username = make_unique_username(email.split("@")[0])
     user = User.objects.create_user(username=username, email=email, password=password)
     user.first_name = name
     user.save()
 
-    # Create profile
+    # ✅ Create profile with role
     Profile.objects.create(user=user, role=role)
 
-    messages.success(request, "Registration successful! Please login.")
-    return redirect("home")
+    # ✅ Automatically login user
+    login(request, user)
+
+    # ✅ Redirect based on role
+    if role == "owner":
+        messages.success(request, "Registration successful! Welcome, Pet Owner 🐾")
+        return redirect("pet_owner_dashboard")
+    elif role == "sitter":
+        messages.success(request, "Registration successful! Welcome, Pet Sitter 🐶")
+        return redirect("pet_sitter_dashboard")
+
+    # fallback
+    return redirect("dashboard")
 
 
+# 🔑 Login
 def login_user(request):
     if request.method == "POST":
         email = request.POST.get("loginEmail", "").strip()
@@ -119,17 +134,35 @@ def login_user(request):
             return redirect("home")
 
         login(request, user)
-        messages.success(request, f"Welcome back, {user.first_name or user.username}!")
+
+        # ✅ Redirect to correct dashboard
+        if hasattr(user, "profile"):
+            if user.profile.role == "owner":
+                return redirect("pet_owner_dashboard")
+            elif user.profile.role == "sitter":
+                return redirect("pet_sitter_dashboard")
         return redirect("dashboard")
 
     return redirect("home")
 
 
+# 🏡 Dashboards
 @login_required(login_url='home')
 def dashboard(request):
     return render(request, "dashboard.html")
 
 
+@login_required(login_url='home')
+def pet_owner_dashboard(request):
+    return render(request, "frontend/pet_owner_dashboard.html")
+
+
+@login_required(login_url='home')
+def pet_sitter_dashboard(request):
+    return render(request, "frontend/pet_sitter_dashboard.html")
+
+
+# 🚪 Logout
 def logout_user(request):
     logout(request)
     messages.success(request, "You have logged out successfully.")

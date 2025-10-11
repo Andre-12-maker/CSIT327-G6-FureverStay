@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Owner Dashboard | FureverStay</title>
+  <link rel="icon" type="image/png" href="{% static 'assets/favicon.png' %}">
+  <link rel="stylesheet" href="{% static 'css/pet_owner_dashboard.css' %}">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="logo-section">
+      <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+    </div>
+    <nav>
+      <a href="#">HOME</a>
+      <a href="#">PROFILE</a>
+      <a href="#">ABOUT US</a>
+    </nav>
+    <div class="user-menu">
+      <button class="dropdown-btn">Name <span class="arrow">▲</span></button>
+    </div>
+  </header>
+
+  <!-- MAIN SECTION -->
+  <main class="dashboard">
+    <section class="search-section">
+      <div class="search-header">
+        <h1>Find a pet sitter to care for your pet</h1>
+        <img src="{% static 'assets/hero-dogcat.jpg' %}" alt="Dog and Cat" class="hero-image">
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="search-bar">
+        <div class="search-group">
+          <label>I'm looking for</label>
+          <select>
+            <option>Pet Sitting</option>
+            <option>Dog Walking</option>
+            <option>Pet Boarding</option>
+          </select>
+        </div>
+
+        <div class="search-group">
+          <label>Near</label>
+          <input type="text" placeholder="Enter your city">
+        </div>
+
+        <div class="search-group">
+          <label>On</label>
+          <input type="date">
+        </div>
+
+        <button class="search-btn">Find a Sitter</button>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <section class="main-content">
+      <!-- LEFT FILTER PANEL -->
+      <aside class="filter-panel">
+        <div class="filter-card">
+          <h4>Service</h4>
+          <select>
+            <option>Home Visit</option>
+            <option>Dog Walking</option>
+            <option>Pet Boarding</option>
+          </select>
+
+          <h4>Location</h4>
+          <input type="text" placeholder="Enter city">
+
+          <h4>Dates</h4>
+          <input type="date">
+
+          <h4>Price (Php)</h4>
+          <div class="price-range">
+            <input type="range" min="500" max="2000" value="1000">
+            <div class="range-labels">
+              <span>500</span><span>2000</span>
+            </div>
+          </div>
+
+          <h4>How many pets?</h4>
+          <div class="counter">
+            <label>Small Dog</label>
+            <div class="count-btns">
+              <button>-</button><span>0</span><button>+</button>
+            </div>
+          </div>
+          <div class="counter">
+            <label>Medium Dog</label>
+            <div class="count-btns">
+              <button>-</button><span>0</span><button>+</button>
+            </div>
+          </div>
+
+          <h4>Advanced Filters</h4>
+          <ul class="advanced-filters">
+            <li><input type="checkbox">Sitter has no other pets</li>
+            <li><input type="checkbox">Sitter has no dogs</li>
+            <li><input type="checkbox">Sitter has no cats</li>
+            <li><input type="checkbox">Sitter accepts only 1 client at a time</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- CENTER LIST OF PET SITTERS -->
+      <section class="sitter-list">
+        <h3>All pet sitters:</h3>
+
+        <div class="sitter-card">
+          <img src="{% static 'assets/owner1.jpg' %}" alt="Cristopher" class="sitter-photo">
+          <div class="sitter-info">
+            <div class="sitter-header">
+              <h4>Cristopher</h4>
+              <span class="new-sitter">NEW SITTER</span>
+            </div>
+            <p>Social guy who loves pets</p>
+            <p class="distance">1.2km away</p>
+            <div class="rating">★★★★★ <span>(3 reviews)</span></div>
+          </div>
+          <div class="price">
+            <span>from Php</span>
+            <h4>665 / day</h4>
+          </div>
+        </div>
+
+        <div class="sitter-card">
+          <img src="{% static 'assets/sara.jpg' %}" alt="Sara" class="sitter-photo">
+          <div class="sitter-info">
+            <h4>Sara</h4>
+            <p>loving and reliable pet care</p>
+            <p class="distance">0.5km away</p>
+            <div class="rating">★★★★★ <span>(10 reviews)</span></div>
+          </div>
+          <div class="price">
+            <span>from Php</span>
+            <h4>870 / day</h4>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT SAVED SITTERS -->
+      <aside class="saved-sitters">
+        <h4>Saved Pet Sitters:</h4>
+        <div class="saved-box">
+          <p>No saved sitters yet.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

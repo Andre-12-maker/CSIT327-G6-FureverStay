@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Sitter Dashboard | FureverStay</title>
+    <link rel="icon" type="image/png" href="{% static 'assets/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/pet_sitter_dashboard.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo-section">
+            <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+        </div>
+        <nav>
+            <a href="#">HOME</a>
+            <a href="#">PROFILE</a>
+            <a href="#">ABOUT US</a>
+        </nav>
+        <div class="user-menu">
+            <button class="dropdown-btn">Name <span class="arrow">▲</span></button>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <!-- Left Calendar Panel -->
+        <section class="calendar-section">
+            <div class="calendar-card">
+                <div class="calendar-tabs">
+                    <button class="active">Manage</button>
+                    <button>Pending</button>
+                </div>
+                <div class="calendar-content">
+                    <table class="calendar">
+                        <thead>
+                            <tr>
+                                <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>28</td><td>29</td><td>30</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+                            <tr><td>5</td><td>6</td><td>7</td><td class="active">9</td><td>10</td><td>11</td><td>12</td></tr>
+                            <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="reservations-info">Total reservations for this month: <b>10</b></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Middle Reservation Section -->
+        <section class="reservations-section">
+            <h3>Reserved owner on this date:</h3>
+            
+            <div class="reservation-card">
+                <img src="{% static 'assets/owner1.jpg' %}" alt="Cristopher" class="owner-photo">
+                <div class="reservation-info">
+                    <h4>Cristopher</h4>
+                    <p>Apas Lahug 121212 Cebu City</p>
+                    <p>Dog walking</p>
+                    <p>Small Dog -2</p>
+                    <p>Pick-up</p>
+                </div>
+                <div class="chat-icon">💬</div>
+            </div>
+
+            <div class="reservation-card">
+                <img src="{% static 'assets/owner2.jpg' %}" alt="Cristopher" class="owner-photo">
+                <div class="reservation-info">
+                    <h4>Cristopher</h4>
+                    <p>Apas Lahug 121212 Cebu City</p>
+                    <p>Dog walking</p>
+                    <p>Small Dog -2</p>
+                    <p>Pick-up</p>
+                </div>
+                <div class="chat-icon">💬</div>
+            </div>
+        </section>
+
+        <!-- Right Messages Panel -->
+        <aside class="messages-section">
+            <h4>Messages</h4>
+            <div class="message">
+                <img src="{% static 'assets/owner1.jpg' %}" alt="User" class="message-photo">
+                <div class="message-text">
+                    <p><b>You:</b> Helllo, we are available...</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+</body>
+</html>
