@@ -71,4 +71,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+  function goToStep2() {
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+
+    // Simple validation
+    const inputs = step1.querySelectorAll("input[required]");
+    for (let input of inputs) {
+      if (!input.value.trim()) {
+        alert("Please fill in all fields before continuing.");
+        return;
+      }
+    }
+
+    step1.style.display = "none";
+    step2.style.display = "block";
+  }
+
+  function goToStep1() {
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step1").style.display = "block";
+  }
+
+  function closePetOwnerModal() {
+    document.getElementById("petOwnerModal").style.display = "none";
+  }
 });

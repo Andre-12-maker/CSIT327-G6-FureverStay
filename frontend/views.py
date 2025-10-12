@@ -6,10 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from frontend.models import Profile
+from frontend.models import Profile, Pet
 
 
-# 🧠 Helper: Validate password strength
+# 🧠 Helper: Validate password
 def is_valid_password(password):
     if len(password) < 8:
         return False
@@ -24,7 +24,7 @@ def is_valid_password(password):
     return True
 
 
-# 🧠 Helper: Generate unique username based on email prefix
+# 🧠 Helper: Generate unique username
 def make_unique_username(base_username):
     username = base_username
     counter = 1
@@ -55,17 +55,21 @@ def register_pet_sitter(request):
 
 # 🔐 Universal Register Function
 def register_user(request, role):
-    name = request.POST.get("username", "").strip()
+    first_name = request.POST.get("first_name", "").strip()
+    last_name = request.POST.get("last_name", "").strip()
     email = request.POST.get("email", "").strip()
     password = request.POST.get("password", "").strip()
     confirm_password = request.POST.get("confirm_password", "").strip()
 
-    # ✅ Validate name
-    if not name or len(name) < 2:
-        messages.error(request, "Name must be at least 2 characters.")
+    # Validate names
+    if not first_name or len(first_name) < 2:
+        messages.error(request, "First name must be at least 2 characters.")
+        return redirect("home")
+    if not last_name or len(last_name) < 2:
+        messages.error(request, "Last name must be at least 2 characters.")
         return redirect("home")
 
-    # ✅ Validate email
+    # Validate email
     try:
         validate_email(email)
     except ValidationError:
@@ -76,7 +80,7 @@ def register_user(request, role):
         messages.error(request, "Email already exists.")
         return redirect("home")
 
-    # ✅ Validate password
+    # Validate password
     if not is_valid_password(password):
         messages.error(
             request,
@@ -88,28 +92,40 @@ def register_user(request, role):
         messages.error(request, "Passwords do not match.")
         return redirect("home")
 
-    # ✅ Create user
-    username = make_unique_username(email.split("@")[0])
+    # Create user and profile
+    base_username = email.split("@")[0]
+    username = make_unique_username(base_username)
     user = User.objects.create_user(username=username, email=email, password=password)
-    user.first_name = name
+    user.first_name = first_name
+    user.last_name = last_name
     user.save()
 
-    # ✅ Create profile with role
     Profile.objects.create(user=user, role=role)
 
-    # ✅ Automatically login user
-    login(request, user)
-
-    # ✅ Redirect based on role
+    # ✅ If the role is "owner", save pet info
     if role == "owner":
-        messages.success(request, "Registration successful! Welcome, Pet Owner 🐾")
-        return redirect("pet_owner_dashboard")
-    elif role == "sitter":
-        messages.success(request, "Registration successful! Welcome, Pet Sitter 🐶")
-        return redirect("pet_sitter_dashboard")
+        pet_name = request.POST.get("pet_name", "").strip()
+        species = request.POST.get("species", "").strip()
+        breed = request.POST.get("breed", "").strip()
+        age = request.POST.get("age", "").strip()
+        weight = request.POST.get("weight", "").strip()
 
-    # fallback
-    return redirect("dashboard")
+        if pet_name and species and breed and age and weight:
+            Pet.objects.create(
+                owner=user,
+                pet_name=pet_name,
+                species=species,
+                breed=breed,
+                age=int(age),
+                weight=float(weight)
+            )
+
+    # Automatically login and redirect
+    login(request, user)
+    if role == "owner":
+        return redirect("pet_owner_dashboard")
+    else:
+        return redirect("pet_sitter_dashboard")
 
 
 # 🔑 Login
@@ -135,13 +151,13 @@ def login_user(request):
 
         login(request, user)
 
-        # ✅ Redirect to correct dashboard
         if hasattr(user, "profile"):
             if user.profile.role == "owner":
                 return redirect("pet_owner_dashboard")
-            elif user.profile.role == "sitter":
+            else:
                 return redirect("pet_sitter_dashboard")
-        return redirect("dashboard")
+        else:
+            return redirect("dashboard")
 
     return redirect("home")
 

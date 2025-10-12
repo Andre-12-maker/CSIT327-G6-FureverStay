@@ -90,65 +90,95 @@
       <h2>Pet Sitter Registration</h2>
       <form id="petSitterForm" method="POST" action="{% url 'register_pet_sitter' %}">
         {% csrf_token %}
-        <label>Username</label>
-        <input type="text" name="username" placeholder="Enter username" required>
-        <small class="rules-popup">Must be at least 2 characters.</small>
+        <label>First Name</label>
+        <input type="text" name="first_name" placeholder="Enter first name" required>
+
+        <label>Last Name</label>
+        <input type="text" name="last_name" placeholder="Enter last name" required>
 
         <label>Email Address</label>
         <input type="email" name="email" placeholder="Enter email" required>
-        <small class="rules-popup">Must be a valid email address.</small>
 
         <label>Password</label>
         <input type="password" name="password" placeholder="Enter password" required>
-        <small class="rules-popup">Must be at least 8 characters, with uppercase, lowercase, number & special character.</small>
 
         <label>Confirm Password</label>
         <input type="password" name="confirm_password" placeholder="Confirm password" required>
-        <small class="rules-popup">Must match the password entered above.</small>
 
         <div class="button-group">
           <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
-          <span class="text-button" onclick="showSuccessPetSitter()">Next &#xbb;</span>
+          <button type="submit" class="text-button">Finish &#xbb;</button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
-<!-- PET OWNER REGISTRATION MODAL -->
+<!-- REGISTER AS PET OWNER -->
 <div id="petOwnerModal" class="modal registration-modal">
   <div class="modal-content">
     <div class="modal-image">
       <img src="{% static 'assets/petowner.png' %}" alt="Pet Owner Registration">
     </div>
+
     <div class="modal-text">
-      <h2>Pet Owner Registration</h2>
+      <h2>Register as Pet Owner</h2>
+
       <form id="petOwnerForm" method="POST" action="{% url 'register_pet_owner' %}">
         {% csrf_token %}
-        <label>Username</label>
-        <input type="text" name="username" placeholder="Enter username" required>
-        <small class="rules-popup">Must be at least 2 characters.</small>
 
-        <label>Email Address</label>
-        <input type="email" name="email" placeholder="Enter email" required>
-        <small class="rules-popup">Must be a valid email address.</small>
+        <!-- STEP 1: Personal Info -->
+        <div id="step1">
+          <label>First name</label>
+          <input type="text" name="first_name" placeholder="Enter first name" required>
 
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Enter password" required>
-        <small class="rules-popup">Must be at least 8 characters, with uppercase, lowercase, number & special character.</small>
+          <label>Last name</label>
+          <input type="text" name="last_name" placeholder="Enter last name" required>
 
-        <label>Confirm Password</label>
-        <input type="password" name="confirm_password" placeholder="Confirm password" required>
-        <small class="rules-popup">Must match the password entered above.</small>
+          <label>Email Address:</label>
+          <input type="email" name="email" placeholder="Enter email" required>
 
-        <div class="button-group">
-          <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
-         <span class="text-button" onclick="showSuccessPetSitter()">Next &#xbb;</span>
+          <label>Password:</label>
+          <input type="password" name="password" placeholder="Enter password" required>
+
+          <label>Confirm Password:</label>
+          <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+          <div class="button-group">
+            <span class="text-button" onclick="closePetOwnerModal()">&#xab; Back</span>
+            <span class="text-button" onclick="goToStep2()">Next &#xbb;</span>
+          </div>
+        </div>
+
+        <!-- STEP 2: Pet Info -->
+        <div id="step2" style="display:none;">
+          <h3>─── Pet information ───</h3>
+
+          <label>Pet name</label>
+          <input type="text" name="pet_name" placeholder="Enter your pet's name" required>
+
+          <label>Species</label>
+          <input type="text" name="species" placeholder="e.g. Dog, Cat" required>
+
+          <label>Breed</label>
+          <input type="text" name="breed" placeholder="Enter breed" required>
+
+          <label>Age</label>
+          <input type="number" name="age" min="0" placeholder="Enter age" required>
+
+          <label>Weight (kg)</label>
+          <input type="number" name="weight" min="0" step="0.1" placeholder="Enter weight" required>
+
+          <div class="button-group">
+            <span class="text-button" onclick="goToStep1()">&#xab; Back</span>
+            <button type="submit" class="text-button">Finish &#xbb;</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 
 <!-- SUCCESS MODAL PET SITTER -->
 <div id="successPetSitterModal" class="modal success-modal">
