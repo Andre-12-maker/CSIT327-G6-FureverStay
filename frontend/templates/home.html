@@ -40,7 +40,7 @@
 <div id="loginModal" class="modal login-modal">
   <div class="modal-content">
     <h2>Login to FureverStay</h2>
-    <form method="POST" action="{% url 'login' %}">
+    <form method="POST" action="{% url 'frontend:login' %}">
       {% csrf_token %}
       <label for="loginEmail">Email</label>
       <input id="loginEmail" type="email" name="loginEmail" placeholder="Enter your email" required>
@@ -86,28 +86,66 @@
     <div class="modal-image">
       <img src="{% static 'assets/petsitter.png' %}" alt="Pet Sitter Registration">
     </div>
+
     <div class="modal-text">
       <h2>Pet Sitter Registration</h2>
-      <form id="petSitterForm" method="POST" action="{% url 'register_pet_sitter' %}">
+
+      <form id="petSitterForm" method="POST" action="{% url 'frontend:register_pet_sitter' %}">
         {% csrf_token %}
-        <label>First Name</label>
-        <input type="text" name="first_name" placeholder="Enter first name" required>
 
-        <label>Last Name</label>
-        <input type="text" name="last_name" placeholder="Enter last name" required>
+        <!-- STEP 1: Personal Info -->
+        <div id="sitter-step1">
+          <div class="name-row">
+            <div class="input-group">
+              <label>First Name</label>
+              <input type="text" name="first_name" placeholder="Enter first name" required>
+            </div>
+            <div class="input-group">
+              <label>Last Name</label>
+              <input type="text" name="last_name" placeholder="Enter last name" required>
+            </div>
+          </div>
 
-        <label>Email Address</label>
-        <input type="email" name="email" placeholder="Enter email" required>
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="Enter email" required>
 
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Enter password" required>
+          <label>Contact Number</label>
+          <input type="text" name="contact_number" placeholder="Enter contact number" required>
 
-        <label>Confirm Password</label>
-        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+          <label>Address</label>
+          <input type="text" name="address" placeholder="Enter address" required>
 
-        <div class="button-group">
-          <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
-          <button type="submit" class="text-button">Finish &#xbb;</button>
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Enter password" required>
+
+          <label>Confirm Password</label>
+          <input type="password" name="confirm_password" placeholder="Confirm password" required>
+          <div class="button-group">
+            <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
+            <span class="text-button" onclick="goToSitterStep2()">Next &#xbb;</span>
+          </div>
+        </div>
+
+        <!-- STEP 2: Sitter Details -->
+        <div id="sitter-step2" style="display:none;">
+          <h3>─── Sitter Details ───</h3>
+
+          <label>Bio</label>
+          <input type="text" name="bio" placeholder="Tell us about yourself" required>
+
+          <label>Hourly Rate (₱)</label>
+          <input type="number" name="hourly_rate" placeholder="Enter your hourly rate" required>
+
+          <label>Availability</label>
+          <input type="text" name="availability" placeholder="e.g., Weekdays, Weekends, Flexible" required>
+
+          <label>Years of Experience</label>
+          <input type="number" name="experience" placeholder="Enter years of experience" required>
+
+          <div class="button-group">
+            <span class="text-button" onclick="backToStep1('petSitterModal')">&#xab; Back</span>
+            <span class="text-button" onclick="submitSitterStep2()">Submit &#xbb;</span>
+          </div>
         </div>
       </form>
     </div>
@@ -124,61 +162,78 @@
     <div class="modal-text">
       <h2>Register as Pet Owner</h2>
 
-      <form id="petOwnerForm" method="POST" action="{% url 'register_pet_owner' %}">
+      <form id="petOwnerForm" method="POST" action="{% url 'frontend:register_pet_owner' %}">
         {% csrf_token %}
 
         <!-- STEP 1: Personal Info -->
-        <div id="step1">
-          <label>First name</label>
-          <input type="text" name="first_name" placeholder="Enter first name" required>
+        <div id="owner-step1">
+          <div class="name-row">
+            <div class="input-group">
+              <label>First Name</label>
+              <input type="text" name="first_name" placeholder="Enter first name" required>
+            </div>
+            <div class="input-group">
+              <label>Last Name</label>
+              <input type="text" name="last_name" placeholder="Enter last name" required>
+            </div>
+          </div>
 
-          <label>Last name</label>
-          <input type="text" name="last_name" placeholder="Enter last name" required>
-
-          <label>Email Address:</label>
+          <label>Email Address</label>
           <input type="email" name="email" placeholder="Enter email" required>
 
-          <label>Password:</label>
+          <label>Contact Number</label>
+          <input type="text" name="contact_number" placeholder="Enter contact number" required>
+
+          <label>Address</label>
+          <input type="text" name="address" placeholder="Enter address" required>
+
+          <label>Password</label>
           <input type="password" name="password" placeholder="Enter password" required>
 
-          <label>Confirm Password:</label>
+          <label>Confirm Password</label>
           <input type="password" name="confirm_password" placeholder="Confirm password" required>
 
           <div class="button-group">
-            <span class="text-button" onclick="closePetOwnerModal()">&#xab; Back</span>
-            <span class="text-button" onclick="goToStep2()">Next &#xbb;</span>
+            <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
+            <span class="text-button" onclick="goToOwnerStep2()">Next &#xbb;</span>
           </div>
         </div>
 
         <!-- STEP 2: Pet Info -->
-        <div id="step2" style="display:none;">
-          <h3>─── Pet information ───</h3>
+        <div id="owner-step2" style="display:none;">
+          <h3>─── Pet Information ───</h3>
 
-          <label>Pet name</label>
-          <input type="text" name="pet_name" placeholder="Enter your pet's name" required>
+          <div class="name-row">
+            <div class="input-group">
+              <label>Pet Name</label>
+              <input type="text" name="pet_name" placeholder="Enter pet's name" required>
+            </div>
+            <div class="input-group">
+              <label>Species</label>
+              <input type="text" name="species" placeholder="e.g., Dog, Cat" required>
+            </div>
+          </div>
 
-          <label>Species</label>
-          <input type="text" name="species" placeholder="e.g. Dog, Cat" required>
-
-          <label>Breed</label>
-          <input type="text" name="breed" placeholder="Enter breed" required>
-
-          <label>Age</label>
-          <input type="number" name="age" min="0" placeholder="Enter age" required>
-
-          <label>Weight (kg)</label>
-          <input type="number" name="weight" min="0" step="0.1" placeholder="Enter weight" required>
+          <div class="name-row">
+            <div class="input-group">
+              <label>Breed</label>
+              <input type="text" name="breed" placeholder="Enter breed" required>
+            </div>
+            <div class="input-group">
+              <label>Age</label>
+              <input type="number" name="age" min="0" placeholder="Enter age" required>
+            </div>
+          </div>
 
           <div class="button-group">
-            <span class="text-button" onclick="goToStep1()">&#xab; Back</span>
-            <button type="submit" class="text-button">Finish &#xbb;</button>
+            <span class="text-button" onclick="backToStep1('petOwnerModal')">&#xab; Back</span>
+            <span class="text-button" onclick="submitOwnerStep2()">Submit &#xbb;</span>
           </div>
         </div>
       </form>
     </div>
   </div>
 </div>
-
 
 <!-- SUCCESS MODAL PET SITTER -->
 <div id="successPetSitterModal" class="modal success-modal">

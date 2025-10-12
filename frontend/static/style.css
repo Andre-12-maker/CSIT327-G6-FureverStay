@@ -1,6 +1,8 @@
 /* === FureverStay Style Updated === */
 
-/* Global Colors */
+/* ------------------------------------------------------------- */
+/* [1] GLOBAL COLORS */
+/* ------------------------------------------------------------- */
 :root {
   --bg-color: #795959;
   --modal-bg: #f8c8c8;
@@ -11,7 +13,9 @@
   --muted: #e0dcdc;
 }
 
-/* Reset */
+/* ------------------------------------------------------------- */
+/* [2] RESET STYLES */
+/* ------------------------------------------------------------- */
 body, html {
   margin: 0;
   padding: 0;
@@ -21,7 +25,9 @@ body, html {
   height: 100%;
 }
 
-/* Header */
+/* ------------------------------------------------------------- */
+/* [3] HEADER SECTION */
+/* ------------------------------------------------------------- */
 .header {
   position: absolute;
   top: 1rem;
@@ -48,14 +54,16 @@ body, html {
   color: #fff;
 }
 
-/* HERO SECTION */
+/* ------------------------------------------------------------- */
+/* [4] HOMEPAGE - HERO SECTION */
+/* ------------------------------------------------------------- */
 .hero-section {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: var(--bg-color);
-  padding: 0; /* removed padding */
+  padding: 0;
 }
 
 .hero-container {
@@ -72,7 +80,7 @@ body, html {
   width: 620px;
   height: 629px;
   object-fit: cover;
-  margin: 0; /* removed padding/margin around icon */
+  margin: 0;
 }
 
 .hero-rating {
@@ -101,12 +109,11 @@ body, html {
   align-items: flex-start;
 }
 
-
 .hero-logo {
   width: 380px;
   height: 173px;
   object-fit: cover;
-  margin: 0; /* removed padding/margin around logo */
+  margin: 0;
 }
 
 .hero-description {
@@ -145,7 +152,7 @@ body, html {
   border-radius: 12px;
 }
 
-/* Responsive */
+/* === Responsive Adjustments for Homepage === */
 @media (max-width: 1200px) {
   .hero-container {
     flex-direction: column;
@@ -156,10 +163,7 @@ body, html {
   .hero-logo {
     width: 90%;
     height: auto;
-    margin: 0; /* ensures no padding/margin in responsive view */
-    background: none;
-    background-image: none;
-    background-color: transparent;
+    margin: 0;
   }
 
   .pet-image {
@@ -168,8 +172,9 @@ body, html {
   }
 }
 
-
-/* === Modals === */
+/* ------------------------------------------------------------- */
+/* [5] GLOBAL MODALS BASE */
+/* ------------------------------------------------------------- */
 .modal {
   display: none;
   position: fixed;
@@ -256,7 +261,9 @@ body, html {
   text-decoration: underline;
 }
 
-/* === REGISTER MODAL FORMAL FIXED SIZE === */
+/* ------------------------------------------------------------- */
+/* [6] REGISTER MODAL (SELECT ROLE) */
+/* ------------------------------------------------------------- */
 .register-modal .modal-content {
   display: flex;
   flex-direction: row;
@@ -286,7 +293,6 @@ body, html {
   height: 563px;
   border-radius: 34px;
   object-fit: cover;
-  opacity: 1;
 }
 
 /* Modal Text */
@@ -303,7 +309,6 @@ body, html {
   font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 64px;
-  line-height: 141%;
   text-align: center;
   margin-bottom: 2rem;
   color: var(--brand);
@@ -312,8 +317,6 @@ body, html {
 /* Buttons Group */
 .register-modal .modal-text .button-group {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   gap: 20px;
   margin-top: 20px;
 }
@@ -327,7 +330,6 @@ body, html {
   font-weight: 700;
   font-size: 18px;
   cursor: pointer;
-  opacity: 1;
   transition: all 0.3s ease;
 }
 
@@ -337,13 +339,14 @@ body, html {
 }
 
 .register-modal .modal-text .or-label {
-  font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 24px;
   color: #333;
 }
 
-/* === Registration Modals === */
+/* ------------------------------------------------------------- */
+/* [7] PET OWNER / PET SITTER REGISTRATION MODALS */
+/* ------------------------------------------------------------- */
 .registration-modal .modal-content {
   display: flex;
   flex-direction: row;
@@ -355,11 +358,11 @@ body, html {
   height: 610px;
   background-color: var(--modal-bg);
   border-radius: 34px;
-  opacity: 1;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
+/* === IMAGE SECTION === */
 .registration-modal .modal-image {
   flex: 1;
   display: flex;
@@ -372,10 +375,9 @@ body, html {
   height: 563px;
   border-radius: 34px;
   object-fit: cover;
-  opacity: 1;
 }
 
-/* Modal Text */
+/* === TEXT & FORM SECTION === */
 .registration-modal .modal-text {
   flex: 1;
   display: flex;
@@ -383,38 +385,48 @@ body, html {
   justify-content: center;
   padding: 2rem;
   position: relative;
+  background-color: var(--modal-bg);
 }
 
 .registration-modal .modal-text h2 {
-  font-family: Roboto, sans-serif;
   font-weight: 700;
-  font-size: 48px;
-  line-height: 141%;
+  font-size: 28px;
   text-align: center;
   margin-bottom: 1.5rem;
   color: var(--brand);
 }
 
+/* Name row for first and last name side by side */
+.registration-modal .name-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.registration-modal .input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .registration-modal .modal-text label {
-  font-family: Roboto, sans-serif;
-  font-weight: 500;
-  font-size: 18px;
-  margin-bottom: 0.3rem;
+  font-size: 14px;
+  margin-bottom: 4px;
   color: #333;
 }
 
 .registration-modal .modal-text input {
-  width: 419px;
-  height: 62px;
-  margin-bottom: 15px;
-  padding: 0 10px;
-  border-radius: 18px;
+  width: 80%;
+  height: 40px;
+  margin-bottom: 12px;
+  border-radius: 14px;
   border: none;
-  font-size: 16px;
   background-color: var(--modal-input);
+  padding: 0 14px;
+  font-size: 15px;
 }
 
-/* Input Validation Popups */
+/* === INPUT VALIDATION POPUPS === */
 .rules-popup {
   display: none;
   background: #fff;
@@ -432,26 +444,54 @@ body, html {
   left: 0;
 }
 
-/* Navigation Back / Next Buttons */
-.registration-modal .navigation {
+/* === NAVIGATION BUTTONS (SPAN) === */
+.button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 18px;
 }
 
-.registration-modal .navigation span {
-  font-family: Roboto, sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--brand);
+.button-group .text-button {
+  background: #795959;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 20px;
+  padding: 10px 28px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
-.registration-modal .navigation span:hover {
-  text-decoration: underline;
+/* Hover animation */
+.button-group .text-button:hover {
+  background: #5f4343;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
-/* === Success Modal Styles === */
+/* Active click effect */
+.button-group .text-button:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollable form if content exceeds modal height */
+.scrollable-form {
+  max-height: 550px;
+  overflow-y: auto;
+}
+
+/* Step sections hidden by default */
+#sitter-step2,
+#owner-step2 {
+  display: none;
+}
+
+/* ------------------------------------------------------------- */
+/* [8] SUCCESS MODAL */
+/* ------------------------------------------------------------- */
 .success-modal .modal-content {
   display: flex;
   flex-direction: row;
@@ -463,17 +503,7 @@ body, html {
   height: 610px;
   background-color: var(--modal-bg);
   border-radius: 38px;
-  opacity: 1;
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  overflow: hidden;
-}
-
-.success-modal .modal-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
 }
 
 .success-modal .modal-image img {
@@ -481,43 +511,34 @@ body, html {
   height: 563px;
   border-radius: 42px;
   object-fit: cover;
-  opacity: 1;
 }
 
 .success-modal .modal-text {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 2rem;
+  justify-content: center;
 }
 
 .success-modal .modal-text h2 {
-  font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 48px;
-  text-align: center;
-  margin-bottom: 1rem;
   color: var(--brand);
+  margin-bottom: 1rem;
 }
 
 .success-modal .modal-text p {
-  font-family: Roboto, sans-serif;
-  font-weight: 400;
   font-size: 24px;
   text-align: center;
   margin-bottom: 2rem;
 }
 
 .success-modal .modal-text .text-button {
-  font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: var(--brand);
   cursor: pointer;
-  padding: 5px 10px;
-  transition: color 0.2s ease;
   background: none;
   border: none;
 }
@@ -527,25 +548,9 @@ body, html {
   text-decoration: underline;
 }
 
-/* === Back and Next Text Buttons === */
-.text-button {
-  font-family: Roboto, sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--brand);
-  cursor: pointer;
-  padding: 5px 10px;
-  transition: color 0.2s ease;
-  background: none;
-  border: none;
-}
-
-.text-button:hover {
-  color: var(--btn-hover);
-  text-decoration: underline;
-}
-
-/* === LOGIN MODAL FORMAL FIXED SIZE === */
+/* ------------------------------------------------------------- */
+/* [9] LOGIN MODAL */
+/* ------------------------------------------------------------- */
 .login-modal .modal-content {
   display: flex;
   flex-direction: column;
@@ -557,38 +562,26 @@ body, html {
   height: 489px;
   background-color: var(--modal-bg);
   border-radius: 34px;
-  opacity: 1;
   padding: 2rem;
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 
 .login-modal h2 {
-  font-family: Roboto, sans-serif;
   font-weight: 400;
   font-size: 24px;
-  line-height: 141%;
   text-align: center;
   margin-bottom: 2rem;
   color: var(--brand);
-}
-
-.login-modal label {
-  font-family: Roboto, sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  align-self: flex-start;
-  margin-left: 10px;
 }
 
 .login-modal input {
   width: 100%;
   height: 54px;
   border-radius: 7px;
+  background-color: var(--modal-input);
   border: none;
   padding: 0 10px;
-  font-size: 16px;
   margin-bottom: 10px;
-  background-color: var(--modal-input);
 }
 
 .login-modal .forgot {
@@ -597,26 +590,16 @@ body, html {
   margin-bottom: 1rem;
 }
 
-.login-modal .forgot a {
-  font-size: 0.9rem;
-  color: #007bff;
-  text-decoration: none;
-}
-
-.login-modal .forgot a:hover {
-  text-decoration: underline;
-}
-
 .login-modal button {
   width: 100%;
   height: 45px;
   border-radius: 7px;
   background-color: var(--btn-color);
-  border: none;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
   color: #000;
+  border: none;
   transition: all 0.3s ease;
 }
 
@@ -639,7 +622,7 @@ body, html {
   text-decoration: underline;
 }
 
-/* Responsive Adjustments */
+/* === Responsive Adjustments for Login === */
 @media (max-width: 768px) {
   .login-modal .modal-content {
     width: 90%;

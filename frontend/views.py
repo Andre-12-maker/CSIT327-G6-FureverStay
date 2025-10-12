@@ -43,14 +43,14 @@ def home(request):
 def register_pet_owner(request):
     if request.method == "POST":
         return register_user(request, role="owner")
-    return redirect("home")
+    return redirect("frontend:home")
 
 
 # 🐶 Register Pet Sitter
 def register_pet_sitter(request):
     if request.method == "POST":
         return register_user(request, role="sitter")
-    return redirect("home")
+    return redirect("frontend:home")
 
 
 # 🔐 Universal Register Function
@@ -61,38 +61,38 @@ def register_user(request, role):
     password = request.POST.get("password", "").strip()
     confirm_password = request.POST.get("confirm_password", "").strip()
 
-    # Validate names
+    # --- Validate names ---
     if not first_name or len(first_name) < 2:
         messages.error(request, "First name must be at least 2 characters.")
-        return redirect("home")
+        return redirect("frontend:home")
     if not last_name or len(last_name) < 2:
         messages.error(request, "Last name must be at least 2 characters.")
-        return redirect("home")
+        return redirect("frontend:home")
 
-    # Validate email
+    # --- Validate email ---
     try:
         validate_email(email)
     except ValidationError:
         messages.error(request, "Invalid email format.")
-        return redirect("home")
+        return redirect("frontend:home")
 
     if User.objects.filter(email=email).exists():
         messages.error(request, "Email already exists.")
-        return redirect("home")
+        return redirect("frontend:home")
 
-    # Validate password
+    # --- Validate password ---
     if not is_valid_password(password):
         messages.error(
             request,
             "Password must be at least 8 characters, include uppercase, lowercase, number, and special character."
         )
-        return redirect("home")
+        return redirect("frontend:home")
 
     if password != confirm_password:
         messages.error(request, "Passwords do not match.")
-        return redirect("home")
+        return redirect("frontend:home")
 
-    # Create user and profile
+    # --- Create user ---
     base_username = email.split("@")[0]
     username = make_unique_username(base_username)
     user = User.objects.create_user(username=username, email=email, password=password)
@@ -100,9 +100,14 @@ def register_user(request, role):
     user.last_name = last_name
     user.save()
 
-    Profile.objects.create(user=user, role=role)
+    # --- Create profile ---
+    profile, created = Profile.objects.get_or_create(user=user, defaults={'role': role})
+    if created:
+        print(f"Profile created for {user.username} with role {role}")
+    else:
+        print(f"Profile already exists for {user.username}, role: {profile.role}")
 
-    # ✅ If the role is "owner", save pet info
+    # --- Save pet info if owner ---
     if role == "owner":
         pet_name = request.POST.get("pet_name", "").strip()
         species = request.POST.get("species", "").strip()
@@ -119,13 +124,31 @@ def register_user(request, role):
                 age=int(age),
                 weight=float(weight)
             )
+            print(f"Pet {pet_name} saved for owner {user.username}")
+        else:
+            print(f"Pet info incomplete for owner {user.username}")
 
-    # Automatically login and redirect
+    # --- Automatically login ---
     login(request, user)
-    if role == "owner":
-        return redirect("pet_owner_dashboard")
-    else:
-        return redirect("pet_sitter_dashboard")
+    print("User logged in:", user.username)
+    print("Profile exists:", hasattr(user, "profile"))
+    if hasattr(user, "profile"):
+        print("Role:", user.profile.role)
+
+    # --- Redirect to appropriate dashboard ---
+    try:
+        profile_role = user.profile.role
+        if profile_role == "owner":
+            return redirect("frontend:pet_owner_dashboard")
+        elif profile_role == "sitter":
+            return redirect("frontend:pet_sitter_dashboard")
+        else:
+            print("Unknown role:", profile_role)
+    except AttributeError:
+        messages.warning(request, "Profile not found. Redirecting to home.")
+        print("Profile missing for user:", user.username)
+
+    return redirect("frontend:home")
 
 
 # 🔑 Login
@@ -136,44 +159,53 @@ def login_user(request):
 
         if not email or not password:
             messages.error(request, "Please fill in both email and password.")
-            return redirect("home")
+            return redirect("frontend:home")
 
         try:
             user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
             messages.error(request, "No account found with this email.")
-            return redirect("home")
+            return redirect("frontend:home")
 
         user = authenticate(request, username=user_obj.username, password=password)
         if user is None:
             messages.error(request, "Invalid email or password.")
-            return redirect("home")
+            return redirect("frontend:home")
 
         login(request, user)
 
+        # --- Debug prints ---
+        print("User logged in:", user.username)
+        print("Profile exists:", hasattr(user, "profile"))
         if hasattr(user, "profile"):
-            if user.profile.role == "owner":
-                return redirect("pet_owner_dashboard")
-            else:
-                return redirect("pet_sitter_dashboard")
-        else:
-            return redirect("dashboard")
+            print("Role:", user.profile.role)
 
-    return redirect("home")
+        try:
+            profile_role = user.profile.role
+            if profile_role == "owner":
+                return redirect("frontend:pet_owner_dashboard")
+            elif profile_role == "sitter":
+                return redirect("frontend:pet_sitter_dashboard")
+        except AttributeError:
+            messages.warning(request, "No profile found for this user.")
+
+        return redirect("frontend:home")
+
+    return redirect("frontend:home")
 
 
 # 🏡 Dashboards
-@login_required(login_url='home')
+@login_required(login_url='frontend:home')
 def dashboard(request):
     return render(request, "dashboard.html")
 
 
-@login_required(login_url='home')
+@login_required(login_url='frontend:home')
 def pet_owner_dashboard(request):
     return render(request, "frontend/pet_owner_dashboard.html")
 
 
-@login_required(login_url='home')
+@login_required(login_url='frontend:home')
 def pet_sitter_dashboard(request):
     return render(request, "frontend/pet_sitter_dashboard.html")
 
@@ -182,4 +214,4 @@ def pet_sitter_dashboard(request):
 def logout_user(request):
     logout(request)
     messages.success(request, "You have logged out successfully.")
-    return redirect("home")
+    return redirect("frontend:home")
