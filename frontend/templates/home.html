@@ -43,10 +43,10 @@
     <form method="POST" action="{% url 'frontend:login' %}">
       {% csrf_token %}
       <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" name="loginEmail" placeholder="Enter your email" required>
+      <input id="loginEmail" type="email" name="email" placeholder="Enter your email" required>
 
       <label for="loginPassword">Password</label>
-      <input id="loginPassword" type="password" name="loginPassword" placeholder="Enter your password" required>
+      <input id="loginPassword" type="password" name="password" placeholder="Enter your password" required>
       <small>Password must match your account credentials.</small>
 
       <div class="forgot">

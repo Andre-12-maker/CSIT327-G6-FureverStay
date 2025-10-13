@@ -70,10 +70,15 @@ TEMPLATES = [
 # --- DATABASE ---
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',  # usually "postgres" for Supabase
+        'USER': 'postgres.goljjsrdzroxdugurytt',
+        'PASSWORD': '*U&aYFN6a?G+zU.',
+        'HOST': 'aws-1-us-east-2.pooler.supabase.com',
+        'PORT': '6543',
     }
 }
+
 
 
 # --- PASSWORD VALIDATION ---
