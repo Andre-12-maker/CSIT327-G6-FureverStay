@@ -43,10 +43,10 @@
     <form method="POST" action="{% url 'frontend:login' %}">
       {% csrf_token %}
       <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" name="email" placeholder="Enter your email" required>
+      <input type="email" name="loginEmail" placeholder="Email" required>
 
       <label for="loginPassword">Password</label>
-      <input id="loginPassword" type="password" name="password" placeholder="Enter your password" required>
+      <input type="password" name="loginPassword" placeholder="Password" required>
       <small>Password must match your account credentials.</small>
 
       <div class="forgot">
@@ -120,9 +120,10 @@
 
           <label>Confirm Password</label>
           <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
           <div class="button-group">
-            <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
-            <span class="text-button" onclick="goToSitterStep2()">Next &#xbb;</span>
+            <button type="button" class="text-button" onclick="backToSelection()">&#xab; Back</button>
+            <button type="button" class="text-button" onclick="goToSitterStep2()">Next &#xbb;</button>
           </div>
         </div>
 
@@ -143,8 +144,8 @@
           <input type="number" name="experience" placeholder="Enter years of experience" required>
 
           <div class="button-group">
-            <span class="text-button" onclick="backToStep1('petSitterModal')">&#xab; Back</span>
-            <span class="text-button" onclick="submitSitterStep2()">Submit &#xbb;</span>
+            <button type="button" class="text-button" onclick="backToStep1('petSitterModal')">&#xab; Back</button>
+            <button type="submit" class="text-button">Submit &#xbb;</button>
           </div>
         </div>
       </form>
@@ -152,7 +153,7 @@
   </div>
 </div>
 
-<!-- REGISTER AS PET OWNER -->
+<!-- PET OWNER REGISTRATION MODAL -->
 <div id="petOwnerModal" class="modal registration-modal">
   <div class="modal-content">
     <div class="modal-image">
@@ -194,8 +195,8 @@
           <input type="password" name="confirm_password" placeholder="Confirm password" required>
 
           <div class="button-group">
-            <span class="text-button" onclick="backToSelection()">&#xab; Back</span>
-            <span class="text-button" onclick="goToOwnerStep2()">Next &#xbb;</span>
+            <button type="button" class="text-button" onclick="backToSelection()">&#xab; Back</button>
+            <button type="button" class="text-button" onclick="goToOwnerStep2()">Next &#xbb;</button>
           </div>
         </div>
 
@@ -226,14 +227,15 @@
           </div>
 
           <div class="button-group">
-            <span class="text-button" onclick="backToStep1('petOwnerModal')">&#xab; Back</span>
-            <span class="text-button" onclick="submitOwnerStep2()">Submit &#xbb;</span>
+            <button type="button" class="text-button" onclick="backToStep1('petOwnerModal')">&#xab; Back</button>
+            <button type="submit" class="text-button">Submit &#xbb;</button>
           </div>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 
 <!-- SUCCESS MODAL PET SITTER -->
 <div id="successPetSitterModal" class="modal success-modal">

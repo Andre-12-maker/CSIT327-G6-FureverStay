@@ -86,20 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
     step2.style.display = "block";
   };
 
-  window.submitSitterStep2 = () => {
-    const step2 = document.querySelector("#sitter-step2");
-
-    const inputs = step2.querySelectorAll("input[required]");
-    for (let input of inputs) {
-      if (!input.value.trim()) {
-        alert("Please fill in all fields before submitting.");
-        return;
-      }
-    }
-
-    // Submit the form to Django
-    document.getElementById("petSitterForm").submit();
-  };
 
   // Pet Owner
   window.goToOwnerStep2 = () => {
@@ -118,20 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     step2.style.display = "block";
   };
 
-  window.submitOwnerStep2 = () => {
-    const step2 = document.querySelector("#owner-step2");
 
-    const inputs = step2.querySelectorAll("input[required]");
-    for (let input of inputs) {
-      if (!input.value.trim()) {
-        alert("Please fill in all fields before submitting.");
-        return;
-      }
-    }
-
-    // Submit the form to Django
-    document.getElementById("petOwnerForm").submit();
-  };
 
   // Back buttons for step 2
   window.backToStep1 = (modalId) => {

@@ -27,17 +27,19 @@ class Pet(models.Model):
     species = models.CharField(max_length=50)
     breed = models.CharField(max_length=100)
     age = models.PositiveIntegerField()
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return f"{self.pet_name} ({self.species})"
 
+#Pet Sitter Profile Model
+class PetSitterProfile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    bio = models.TextField(blank=True)
+    availability = models.CharField(max_length=255, blank=True)
+    rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    years_experience = models.PositiveIntegerField(null=True, blank=True)
 
-# ------------------------------
-# Signals
-# Automatically create a Profile when a new User is created
-# ------------------------------
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+    def __str__(self):
+        return f"{self.user.username}'s Sitter Profile"
+
+

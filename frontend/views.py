@@ -6,8 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from frontend.models import Profile, Pet
-
+from frontend.models import Profile, Pet, PetSitterProfile
+from django.db import connection
 
 # 🧠 Helper: Validate password
 def is_valid_password(password):
@@ -34,8 +34,20 @@ def make_unique_username(base_username):
     return username
 
 
+# 🧩 Optional: Check if connected to Supabase
+def check_db_connection():
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT current_database();")
+            db_name = cursor.fetchone()[0]
+            print(f"✅ Connected to database: {db_name}")
+    except Exception as e:
+        print(f"❌ Database connection error: {e}")
+
+
 # 🏠 Home Page
 def home(request):
+    check_db_connection()  # Optional: confirm connection on page load
     return render(request, "home.html")
 
 
@@ -92,13 +104,20 @@ def register_user(request, role):
         messages.error(request, "Passwords do not match.")
         return redirect("frontend:home")
 
-    # --- Create user ---
+    # --- Create user (this saves directly into Supabase PostgreSQL) ---
     base_username = email.split("@")[0]
     username = make_unique_username(base_username)
-    user = User.objects.create_user(username=username, email=email, password=password)
-    user.first_name = first_name
-    user.last_name = last_name
-    user.save()
+
+    try:
+        user = User.objects.create_user(username=username, email=email, password=password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        print(f"✅ User {user.username} successfully created in Supabase DB.")
+    except Exception as e:
+        print(f"❌ Failed to create user in Supabase: {e}")
+        messages.error(request, "Registration failed. Try again later.")
+        return redirect("frontend:home")
 
     # --- Create profile ---
     profile, created = Profile.objects.get_or_create(user=user, defaults={'role': role})
@@ -113,37 +132,48 @@ def register_user(request, role):
         species = request.POST.get("species", "").strip()
         breed = request.POST.get("breed", "").strip()
         age = request.POST.get("age", "").strip()
-        weight = request.POST.get("weight", "").strip()
 
-        if pet_name and species and breed and age and weight:
+        if pet_name and species and breed and age:
             Pet.objects.create(
                 owner=user,
                 pet_name=pet_name,
                 species=species,
                 breed=breed,
                 age=int(age),
-                weight=float(weight)
             )
-            print(f"Pet {pet_name} saved for owner {user.username}")
+            print(f"🐾 Pet '{pet_name}' saved for owner {user.username}")
         else:
-            print(f"Pet info incomplete for owner {user.username}")
+            print(f"⚠️ Pet info incomplete for owner {user.username}")
+
+    # --- Save sitter profile info if sitter ---
+    elif role == "sitter":
+        bio = request.POST.get("bio", "").strip()
+        availability = request.POST.get("availability", "").strip()
+        rate = request.POST.get("rate", "").strip()
+        years_experience = request.POST.get("years_experience", "").strip()
+
+        PetSitterProfile.objects.create(
+            user=user,
+            bio=bio,
+            availability=availability,
+            rate=float(rate) if rate else None,
+            years_experience=int(years_experience) if years_experience else None,
+        )
+        print(f"📝 Sitter profile saved for {user.username}")
+
 
     # --- Automatically login ---
     login(request, user)
     print("User logged in:", user.username)
-    print("Profile exists:", hasattr(user, "profile"))
-    if hasattr(user, "profile"):
-        print("Role:", user.profile.role)
 
-    # --- Redirect to appropriate dashboard ---
     try:
-        profile_role = user.profile.role
-        if profile_role == "owner":
-            return redirect("frontend:pet_owner_dashboard")
-        elif profile_role == "sitter":
-            return redirect("frontend:pet_sitter_dashboard")
-        else:
-            print("Unknown role:", profile_role)
+        if hasattr(user, "profile"):
+            role = user.profile.role
+            print("Role:", role)
+            if role == "owner":
+                return redirect("frontend:pet_owner_dashboard")
+            elif role == "sitter":
+                return redirect("frontend:pet_sitter_dashboard")
     except AttributeError:
         messages.warning(request, "Profile not found. Redirecting to home.")
         print("Profile missing for user:", user.username)
@@ -173,41 +203,15 @@ def login_user(request):
             return redirect("frontend:home")
 
         login(request, user)
-
-        # --- Debug prints ---
-        print("User logged in:", user.username)
-        print("Profile exists:", hasattr(user, "profile"))
+        print("✅ User logged in:", user.username)
         if hasattr(user, "profile"):
             print("Role:", user.profile.role)
-
-        try:
-            profile_role = user.profile.role
-            if profile_role == "owner":
+            if user.profile.role == "owner":
                 return redirect("frontend:pet_owner_dashboard")
-            elif profile_role == "sitter":
+            elif user.profile.role == "sitter":
                 return redirect("frontend:pet_sitter_dashboard")
-        except AttributeError:
-            messages.warning(request, "No profile found for this user.")
-
-        return redirect("frontend:home")
 
     return redirect("frontend:home")
-
-
-# 🏡 Dashboards
-@login_required(login_url='frontend:home')
-def dashboard(request):
-    return render(request, "dashboard.html")
-
-
-@login_required(login_url='frontend:home')
-def pet_owner_dashboard(request):
-    return render(request, "frontend/pet_owner_dashboard.html")
-
-
-@login_required(login_url='frontend:home')
-def pet_sitter_dashboard(request):
-    return render(request, "frontend/pet_sitter_dashboard.html")
 
 
 # 🚪 Logout
@@ -215,3 +219,19 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You have logged out successfully.")
     return redirect("frontend:home")
+
+# 🏡 Dashboards
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required(login_url='frontend:home')
+def dashboard(request):
+    return render(request, "dashboard.html")
+
+@login_required(login_url='frontend:home')
+def pet_owner_dashboard(request):
+    return render(request, "pet_owner_dashboard.html")
+
+@login_required(login_url='frontend:home')
+def pet_sitter_dashboard(request):
+    return render(request, "pet_sitter_dashboard.html")
