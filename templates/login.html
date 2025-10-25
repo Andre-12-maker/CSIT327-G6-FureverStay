@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login | FureverStay{% endblock %}
+
+{% block content %}
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal login-modal">
+  <div class="modal-content">
+    <h2>Login to FureverStay</h2>
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      <label for="loginEmail">Email</label>
+      <input type="email" name="loginEmail" placeholder="Email" required>
+
+      <label for="loginPassword">Password</label>
+      <input type="password" name="loginPassword" placeholder="Password" required>
+      <small>Password must match your account credentials.</small>
+
+      <div class="forgot">
+        <a href="#">Forgot password?</a>
+      </div>
+
+      <button type="submit">Login</button>
+
+      <p class="register-link">
+        Don't have an account? 
+        <a href="{% url 'register' %}">Register</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endblock %}
+  {% block scripts %}
+  <script src="{% static 'modal-scripts.js' %}"></script>
+  <script>
+    // Auto-open the correct modal on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("loginModal") || document.getElementById("registerModal");
+      if (modal) modal.classList.add("show");
+    });
+  </script>
+{% endblock %}
+

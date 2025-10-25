@@ -1,0 +1,31 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.py.class
+
+# Django specific
+db.sqlite3
+*.log
+/media/
+staticfiles/
+
+# Environment files
+.env
+venv/
+env/
+
+# IDE & Editor
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Byte-compiled and temporary files
+*.tmp
+*.bak
+*.swp
+*.swo

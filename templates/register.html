@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register | FureverStay{% endblock %}
+
+{% block content %}
+<!-- REGISTER MODAL -->
+<div id="registerModal" class="modal register-modal show">
+  <div class="modal-content">
+    <div class="modal-image">
+      <img src="{% static 'assets/catdog.png' %}" alt="Cat and Dog">
+    </div>
+    <div class="modal-text">
+      <h2>ARE YOU A</h2>
+      <div class="button-group">
+        <button type="button" onclick="openPetSitter()">Pet Sitter</button>
+        <span class="or-label">OR</span>
+        <button type="button" onclick="openPetOwner()">Pet Owner</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PET SITTER REGISTRATION MODAL -->
+<div id="petSitterModal" class="modal registration-modal">
+  <div class="modal-content">
+    <div class="modal-image">
+      <img src="{% static 'assets/petsitter.png' %}" alt="Pet Sitter Registration">
+    </div>
+    <div class="modal-text">
+      <h2>Pet Sitter Registration</h2>
+      <form id="petSitterForm" method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <input type="hidden" name="role" value="sitter">
+        <div id="sitter-step1">
+          <div class="name-row">
+            <div class="input-group">
+              <label>First Name</label>
+              <input type="text" name="first_name" required>
+            </div>
+            <div class="input-group">
+              <label>Last Name</label>
+              <input type="text" name="last_name" required>
+            </div>
+          </div>
+
+          <label>Email Address</label>
+          <input type="email" name="email" required>
+
+          <label>Contact Number</label>
+          <input type="text" name="contact_number" required>
+
+          <label>Address</label>
+          <input type="text" name="address" required>
+
+          <label>Password</label>
+          <input type="password" name="password" required>
+
+          <label>Confirm Password</label>
+          <input type="password" name="confirm_password" required>
+
+          <div class="button-group">
+            <button type="button" class="text-button" onclick="backToSelection()">« Back</button>
+            <button type="button" class="text-button" onclick="goToSitterStep2()">Next »</button>
+          </div>
+        </div>
+
+        <div id="sitter-step2" style="display:none;">
+          <h3>─── Sitter Details ───</h3>
+          <label>Bio</label>
+          <input type="text" name="bio" required>
+          <label>Hourly Rate (₱)</label>
+          <input type="number" name="hourly_rate" required>
+          <label>Availability</label>
+          <input type="text" name="availability" required>
+          <label>Years of Experience</label>
+          <input type="number" name="experience" required>
+
+          <div class="button-group">
+            <button type="button" class="text-button" onclick="backToStep1('petSitterModal')">« Back</button>
+            <button type="submit" class="text-button">Submit »</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- PET OWNER REGISTRATION MODAL -->
+<div id="petOwnerModal" class="modal registration-modal">
+  <div class="modal-content">
+    <div class="modal-image">
+      <img src="{% static 'assets/petowner.png' %}" alt="Pet Owner Registration">
+    </div>
+    <div class="modal-text">
+      <h2>Register as Pet Owner</h2>
+      <form id="petOwnerForm" method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <input type="hidden" name="role" value="owner">
+        <div id="owner-step1">
+          <div class="name-row">
+            <div class="input-group">
+              <label>First Name</label>
+              <input type="text" name="first_name" required>
+            </div>
+            <div class="input-group">
+              <label>Last Name</label>
+              <input type="text" name="last_name" required>
+            </div>
+          </div>
+
+          <label>Email Address</label>
+          <input type="email" name="email" required>
+          <label>Contact Number</label>
+          <input type="text" name="contact_number" required>
+          <label>Address</label>
+          <input type="text" name="address" required>
+          <label>Password</label>
+          <input type="password" name="password" required>
+          <label>Confirm Password</label>
+          <input type="password" name="confirm_password" required>
+
+          <div class="button-group">
+            <button type="button" class="text-button" onclick="backToSelection()">« Back</button>
+            <button type="button" class="text-button" onclick="goToOwnerStep2()">Next »</button>
+          </div>
+        </div>
+
+        <div id="owner-step2" style="display:none;">
+          <h3>─── Pet Information ───</h3>
+          <div class="name-row">
+            <div class="input-group">
+              <label>Pet Name</label>
+              <input type="text" name="pet_name" required>
+            </div>
+            <div class="input-group">
+              <label>Species</label>
+              <input type="text" name="species" required>
+            </div>
+          </div>
+
+          <div class="name-row">
+            <div class="input-group">
+              <label>Breed</label>
+              <input type="text" name="breed" required>
+            </div>
+            <div class="input-group">
+              <label>Age</label>
+              <input type="number" name="age" min="0" required>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="text-button" onclick="backToStep1('petOwnerModal')">« Back</button>
+            <button type="submit" class="text-button">Submit »</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODALS -->
+<div id="sitterSuccessModal" class="modal success-modal">
+  <div class="modal-content">
+    <div class="modal-image">
+      <img src="{% static 'assets/petsitter.png' %}" alt="Success">
+    </div>
+    <div class="modal-text">
+      <h2>SUCCESSFULLY CREATED AN ACCOUNT</h2>
+      <p>You have now successfully created an account as a pet sitter. Click finish and proceed to login.</p>
+      <a class="text-button" href="{% url 'login' %}">Finish »</a>
+    </div>
+  </div>
+</div>
+
+<div id="ownerSuccessModal" class="modal success-modal">
+  <div class="modal-content">
+    <div class="modal-image">
+      <img src="{% static 'assets/petowner.png' %}" alt="Success">
+    </div>
+    <div class="modal-text">
+      <h2>SUCCESSFULLY CREATED AN ACCOUNT</h2>
+      <p>You have now successfully created an account as a pet owner. Click finish and proceed to login.</p>
+      <a class="text-button" href="{% url 'login' %}">Finish »</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'modal-scripts.js' %}"></script>
+
+<script>
+  // Always open register modal on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    const registerModal = document.getElementById("registerModal");
+    if (registerModal) registerModal.classList.add("show");
+  });
+
+  // ✅ Show success modals based on view context
+  {% if success_modal == "sitter" %}
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("sitterSuccessModal").classList.add("show");
+  });
+  {% elif success_modal == "owner" %}
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("ownerSuccessModal").classList.add("show");
+  });
+  {% endif %}
+</script>
+{% endblock %}

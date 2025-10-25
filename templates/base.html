@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}FureverStay{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <header class="header">
+    <div class="header-buttons">
+      <button id="loginBtn" data-url="{% url 'login' %}">LOGIN</button>
+      <button id="registerBtn" data-url="{% url 'register' %}">REGISTER</button>
+    </div>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  {% block scripts %}
+    <!-- Load modal scripts -->
+    <script src="{% static 'modal-scripts.js' %}"></script>
+  {% endblock %}
+</body>
+</html>
