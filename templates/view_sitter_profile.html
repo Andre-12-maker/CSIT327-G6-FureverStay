@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ profile.first_name }} {{ profile.last_name }} | FureverStay</title>
+  <link rel="stylesheet" href="{% static 'css/view_sitter_profile.css' %}">
+</head>
+<body>
+    <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo-section">
+      <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo" />
+    </div>
+
+    <nav class="nav-links">
+      <a href="{% url 'pet_owner_dashboard' %}">HOME</a>
+      <a href="#">PROFILE</a>
+      <a href="#">ABOUT US</a>
+    </nav>
+
+    <div class="user-menu">
+      <button id="dropdown-btn" class="dropdown-btn">
+        {{ request.user.first_name }} ▼
+      </button>
+      <div class="dropdown-content hidden">
+        <a href="#">My Profile</a>
+        <a href="#">My Bookings</a>
+        <a href="#">Messages</a>
+        <a href="#">Settings</a>
+        <hr />
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% else %}
+  <main class="profile-container">
+    <section class="sitter-header">
+      <img src="{% if sitter_profile and sitter_profile.profile_image %}/media/{{ sitter_profile.profile_image }}{% else %}{% static 'assets/default_profile.png' %}{% endif %}" alt="Sitter photo" class="sitter-photo">
+      <div class="sitter-details">
+        <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
+        <p>{{ sitter_profile.bio|default:"No bio available." }}</p>
+        <p>📍 {{ profile.address|default:"No address listed" }}</p>
+        <p>💬 Experience: {{ sitter_profile.experience_years|default:"Not specified" }} years</p>
+        <p class="rate">₱{{ sitter_profile.hourly_rate|default:"—" }} / hr</p>
+        <button class="book-btn" data-hourly-rate="{{ sitter_profile.hourly_rate|default:0 }}">Book Now</button>
+      </div>
+    </section>
+
+    <section class="availability-section">
+      <h4>Availability Calendar</h4>
+
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button id="prevMonth">◀</button>
+          <h3 id="monthYear"></h3>
+          <button id="nextMonth">▶</button>
+        </div>
+
+        <table class="calendar" id="availabilityCalendar">
+          <thead>
+            <tr>
+              <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+            </tr>
+          </thead>
+          <tbody id="calendarBody" data-sitter-id="{{ sitter_id }}"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+  {% endif %}
+   <!-- Booking Modal -->
+  <div id="bookingModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Book {{ profile.first_name }}</h3>
+      <form method="POST" action="{% url 'create_booking' profile.user_id %}" id="bookingForm">
+        {% csrf_token %}
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" id="start_date" required>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" id="end_date" required>
+
+        <label for="hours_per_day">Hours per day:</label>
+        <input type="number" name="hours_per_day" id="hours_per_day" min="1" max="24" value="1" required>
+        <!-- Select Pets -->
+        <label for="selected_pets">Select Pets</label>
+        <div class="pet-list">
+          {% for pet in pets %}
+            <div>
+              <input type="checkbox" name="pets" value="{{ pet.id }}" id="pet{{ pet.id }}">
+              <label for="pet{{ pet.id }}">{{ pet.pet_name }} ({{ pet.species }})</label>
+            </div>
+          {% empty %}
+            <p>You have no pets added yet.</p>
+          {% endfor %}
+        </div>
+        <p><strong>Total Price:</strong> ₱<span id="totalPrice">0.00</span></p>
+        <div class="modal-actions">
+          <button type="submit" class="confirm-btn">Confirm Booking</button>
+          <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="{% static 'js/pet_owner_dashboardv2.js' %}"></script>
+</body>
+</html>

@@ -47,6 +47,7 @@ class PetSitterProfile(models.Model):
     availability = models.CharField(max_length=255, blank=True)
     hourly_rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     experience_years = models.PositiveIntegerField(null=True, blank=True)
+    profile_image = models.ImageField(upload_to='sitter_profiles/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.sitter.username}'s Sitter Profile"

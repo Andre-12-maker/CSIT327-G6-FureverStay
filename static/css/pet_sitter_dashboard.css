@@ -1,0 +1,413 @@
+:root{
+  --primary:#8B5E5E;
+  --secondary:#C28B7B;
+  --accent:#E5A4A4;
+  --light:#FBEAEA;
+  --text-dark:#4A2C2C;
+  --white:#fff;
+}
+
+/* base */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Poppins", sans-serif;
+  background:var(--light);
+  color:var(--text-dark);
+}
+
+/* NAV */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.8rem 1.5rem;
+  background:var(--primary);
+  color:var(--white);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.logo{height:45px}
+nav a{color:var(--white);text-decoration:none;margin:0 0.8rem;font-weight:500}
+nav a:hover{color:var(--accent)}
+
+/* user menu */
+.user-menu{position:relative}
+.dropdown-btn{
+  background:none;border:none;color:var(--white);cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;gap:6px;
+}
+
+/* main layout */
+.dashboard{
+  display:grid;
+  grid-template-columns: 1fr 2fr 1.2fr;
+  gap:1.25rem;
+  padding:1.5rem;
+}
+
+/* calendar panel */
+.calendar-card{
+  background:var(--white);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+.calendar-tabs{display:flex;gap:0.5rem;margin-bottom:1rem}
+.calendar-tabs .tab-btn{
+  flex:1;padding:0.5rem;border-radius:8px;border:0;background:var(--light);cursor:pointer;font-weight:600;
+}
+.calendar-tabs .tab-btn.active{background:var(--secondary);color:var(--white)}
+
+/* calendar table */
+.calendar{width:100%;border-collapse:collapse;text-align:center}
+.calendar th{padding:8px;color:var(--primary)}
+.calendar td{padding:10px;border-radius:6px;cursor:pointer}
+.calendar td.active{background:var(--primary);color:var(--white)}
+.calendar td:hover{background:var(--accent);color:var(--white)}
+
+/* reservations center */
+.reservations-section::-webkit-scrollbar {
+  width: 6px;
+}
+.reservations-section::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 4px;
+}
+
+
+/* Each booking card layout */
+.reservation-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: var(--light);
+  border-radius: 10px;
+  padding: 1rem;
+  gap: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Info section inside booking */
+.reservation-info {
+  flex: 1;
+}
+
+/* Owner image */
+.owner-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+/* Action buttons container */
+.reservation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Accept button */
+.accept-btn {
+  background: #4CAF50;
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.accept-btn:hover {
+  background: #45a049;
+}
+
+/* Decline button */
+.decline-btn {
+  background: #d9534f;
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.decline-btn:hover {
+  background: #c9302c;
+}
+
+/* Status badges */
+.status {
+  font-weight: 700;
+  text-transform: capitalize;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.accepted {
+  background: #c7f9cc;
+  color: #1b4332;
+}
+
+.status.declined {
+  background: #f8d7da;
+  color: #7a1f1f;
+}
+
+.status.completed {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+/* Responsive adjustment for cards */
+@media (max-width: 768px) {
+  .reservation-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reservation-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .accept-btn, .decline-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* messages right */
+.messages-section{
+  background:var(--white);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+.messages-section h4{text-align:center;color:var(--primary)}
+.message{display:flex;align-items:center;background:var(--light);padding:0.7rem;border-radius:8px;margin-bottom:0.7rem}
+.message-photo{width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)}
+.message-text p{margin:0;font-size:0.95rem}
+
+/* dropdown content */
+.dropdown-content{
+  display:none;
+  position:absolute;
+  right:0;
+  top:48px;
+  background:var(--white);
+  border-radius:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  z-index:30;
+  min-width:180px;
+  overflow:hidden;
+}
+.dropdown-content a{display:block;padding:10px 14px;color:var(--text-dark);text-decoration:none;font-weight:600}
+.dropdown-content a:hover{background:var(--accent);color:var(--white)}
+.dropdown-content hr{margin:0;border:none;border-top:1px solid rgba(0,0,0,0.06)}
+.dropdown-content.show{display:block}
+.logout{color:#b23b3b;font-weight:700;padding:10px 14px}
+
+/* helper */
+.hidden{display:none}
+
+/* responsive */
+@media (max-width:1024px){
+  .dashboard{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .dashboard{grid-template-columns:1fr;padding:1rem}
+  nav{display:none}
+  .dropdown-content{right:10px;top:56px}
+}
+/* ------------------------------------------- */
+/* 💰 Earnings Widget */
+/* ------------------------------------------- */
+.earnings-card {
+  background: var(--light);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+  margin-bottom: 1.2rem;
+}
+
+.earnings-card h4 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.earnings-amount {
+  font-size: 2rem;
+  color: var(--secondary);
+  margin: 0.4rem 0 0;
+  font-weight: 700;
+}
+
+.earnings-label {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  opacity: 0.8;
+}
+
+/* ------------------------------------------- */
+/* 📅 Improved Calendar Styling */
+/* ------------------------------------------- */
+.calendar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar-content {
+  width: 100%;
+}
+
+.calendar {
+  margin-bottom: 0.5rem;
+}
+
+.reservations-info {
+  text-align: center;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-top: 0.8rem;
+}
+
+/* ------------------------------------------- */
+/* 🐶 Reservation Card Hover + Responsive */
+/* ------------------------------------------- */
+.reservation-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.reservation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+.chat-icon {
+  margin-left: auto;
+  background: var(--secondary);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+.chat-icon:hover {
+  background: var(--accent);
+}
+
+/* ------------------------------------------- */
+/* 📨 Messages Enhancements */
+/* ------------------------------------------- */
+.message:hover {
+  background: var(--accent);
+  color: var(--white);
+  transition: 0.3s ease;
+}
+
+/* ------------------------------------------- */
+/* ⚙️ Responsive Tweaks for New Widgets */
+/* ------------------------------------------- */
+@media (max-width: 1024px) {
+  .earnings-card {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .messages-section {
+    order: 3;
+  }
+  .earnings-card {
+    margin-top: 1rem;
+  }
+}
+/* ------------------------------------------- */
+/* 📅 Interactive Availability Calendar */
+/* ------------------------------------------- */
+.calendar-wrapper {
+  width: 100%;
+  text-align: center;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+
+.calendar-header button {
+  background: var(--secondary);
+  border: none;
+  color: var(--white);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.calendar-header button:hover {
+  background: var(--accent);
+}
+
+.calendar-header h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.calendar td {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
+  vertical-align: middle;
+}
+
+/* 🟢 Available day */
+.calendar td.available {
+  background: #c7f9cc;
+  color: #1b4332;
+  font-weight: 600;
+}
+
+/* 🔴 Booked day */
+.calendar td.booked {
+  background: #f8d7da;
+  color: #7a1f1f;
+  font-weight: 600;
+}
+
+/* Hover effect */
+.calendar td:hover {
+  background: var(--accent);
+  color: var(--white);
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .calendar td {
+    width: 38px;
+    height: 38px;
+    font-size: 0.9rem;
+  }
+}
+
+

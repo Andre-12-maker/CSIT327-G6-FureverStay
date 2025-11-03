@@ -23,10 +23,16 @@ DEBUG = True  # ✅ Keep True for development; set False for production
 ALLOWED_HOSTS = []  # ✅ Add your domain or server IP when deploying
 
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 # --- APPLICATIONS ---
 INSTALLED_APPS = [
     'LandingPage',
     'DashboardPage',
+    'PetOwnerDashboard',
+    'PetSitterDashboard',
     'LoginPage',
     'RegistrationPage',
     'django.contrib.admin',

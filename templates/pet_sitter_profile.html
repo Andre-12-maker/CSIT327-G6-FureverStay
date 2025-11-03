@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Sitter Profile</title>
+    <link rel="stylesheet" href="{% static 'css/pet_sitter_profile.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo-section">
+            <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+        </div>
+
+        <nav>
+            <a href="{% url 'pet_sitter_dashboard' %}">HOME</a>
+            <a href="{% url 'sitter_profile' %}" class="active">PROFILE</a>
+            <a href="#">ABOUT US</a>
+        </nav>
+
+        <div class="user-menu">
+            <button class="dropdown-btn" id="userDropdown">
+                {{ request.user.first_name }} <span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-content" id="dropdownContent"aria-hidden="true">
+                <a href="{% url 'sitter_profile' %}">My Profile</a>
+                <a href="#">Bookings</a>
+                <a href="#">Messages</a>
+                <a href="#">Earnings</a>
+                <hr>
+                <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Content -->
+    <main>
+    <section class="profile-wrapper">
+        <h2>My Profile</h2>
+
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+        {% csrf_token %}
+
+        <div class="profile-image">
+            {% if sitter_profile.profile_image %}
+            <img src="{{ sitter_profile.profile_image.url }}" alt="Profile Picture">
+            {% else %}
+            <img src="{% static 'images/default_profile.png' %}" alt="Default">
+            {% endif %}
+            <input type="file" name="profile_image">
+        </div>
+
+        <p><b>Name:</b> {{ profile.first_name }} {{ profile.last_name }}</p>
+        <p><b>Email:</b> {{ profile.email }}</p>
+        <p><b>Address:</b> {{ profile.address }}</p>
+
+        <label><b>Bio:</b></label>
+        <textarea name="bio" rows="3">{{ sitter_profile.bio }}</textarea>
+
+        <label><b>Availability:</b></label>
+        <input type="text" name="availability" value="{{ sitter_profile.availability }}">
+
+        <label><b>Hourly Rate:</b></label>
+        <input type="number" name="hourly_rate" step="0.01" value="{{ sitter_profile.hourly_rate }}">
+
+        <label><b>Experience (years):</b></label>
+        <input type="number" name="experience_years" value="{{ sitter_profile.experience_years }}">
+
+        <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </section>
+    </main>
+
+
+    <script>
+        // Toggle dropdown when button is clicked
+        document.getElementById("userDropdown").addEventListener("click", function (e) {
+            e.stopPropagation(); // prevent closing immediately
+            document.getElementById("dropdownContent").classList.toggle("show");
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener("click", function (e) {
+            const dropdown = document.getElementById("dropdownContent");
+            if (!e.target.closest(".user-menu")) {
+                dropdown.classList.remove("show");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -2,155 +2,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pet Owner Dashboard | FureverStay</title>
-  <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}">
-  <link rel="stylesheet" href="{% static 'pet_owner_dashboard.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}" />
+  <link rel="stylesheet" href="{% static 'css/pet_owner_dashboard.css' %}" />
 </head>
+
 <body>
-  <!-- HEADER -->
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="logo-section">
-      <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+      <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo" />
     </div>
-    <nav>
-      <a href="#">HOME</a>
+
+    <nav class="nav-links">
+      <a href="{% url 'pet_owner_dashboard' %}" class="active">HOME</a>
       <a href="#">PROFILE</a>
       <a href="#">ABOUT US</a>
     </nav>
+
     <div class="user-menu">
-      <button class="dropdown-btn">Name <span class="arrow">▲</span></button>
+      <button id="dropdown-btn" class="dropdown-btn">
+        {{ request.user.first_name }} ▼
+      </button>
+      <div class="dropdown-content hidden">
+        <a href="#">My Profile</a>
+        <a href="#">My Bookings</a>
+        <a href="#">Messages</a>
+        <a href="#">Settings</a>
+        <hr />
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN SECTION -->
-  <main class="dashboard">
-    <section class="search-section">
-      <div class="search-header">
-        <h1>Find a pet sitter to care for your pet</h1>
-        <img src="{% static 'assets/dogcat.png' %}" alt="Dog and Cat" class="hero-image">
-      </div>
-
-      <!-- SEARCH BAR -->
-      <div class="search-bar">
-        <div class="search-group">
-          <label>I'm looking for</label>
-          <select>
-            <option>Pet Sitting</option>
-            <option>Dog Walking</option>
-            <option>Pet Boarding</option>
-          </select>
-        </div>
-
-        <div class="search-group">
-          <label>Near</label>
-          <input type="text" placeholder="Enter your city">
-        </div>
-
-        <div class="search-group">
-          <label>On</label>
-          <input type="date">
-        </div>
-
-        <button class="search-btn">Find a Sitter</button>
-      </div>
+  <!-- MAIN DASHBOARD -->
+  <main class="dashboard-container">
+    <section class="intro-section">
+      <h1>Welcome back, {{ request.user.first_name }}!</h1>
+      <p>Find trusted sitters and manage your pets easily.</p>
     </section>
 
-    <!-- MAIN CONTENT -->
-    <section class="main-content">
-      <!-- LEFT FILTER PANEL -->
-      <aside class="filter-panel">
-        <div class="filter-card">
-          <h4>Service</h4>
-          <select>
-            <option>Home Visit</option>
-            <option>Dog Walking</option>
-            <option>Pet Boarding</option>
+    <section class="dashboard-grid">
+      <!-- My Pets -->
+      <div class="dashboard-card">
+        <h2>🐾 My Pets</h2>
+        {% if pets %}
+        <ul>
+          {% for pet in pets %}
+          <li>{{ pet.pet_name }} - {{ pet.species }} ({{ pet.breed }})</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>You haven’t added any pets yet.</p>
+        {% endif %}
+        <button class="btn">Add New Pet</button>
+      </div>
+
+      <!-- Find a Sitter -->
+      <div class="dashboard-card wide">
+        <h2>🔍 Find a Pet Sitter</h2>
+
+        <!-- Search Filters -->
+        <form class="search-bar" id="searchForm">
+          <input type="text" id="locationInput" placeholder="Search by city or location" />
+
+          <input type="number" id="minPrice" placeholder="Min ₱/hr" min="0" />
+          <input type="number" id="maxPrice" placeholder="Max ₱/hr" min="0" />
+
+          <select id="availabilityFilter">
+            <option value="">Availability</option>
+            <option value="Weekdays">Weekdays</option>
+            <option value="Weekends">Weekends</option>
           </select>
 
-          <h4>Location</h4>
-          <input type="text" placeholder="Enter city">
+          <select id="sortPrice">
+            <option value="">Sort by Price</option>
+            <option value="asc">Low → High</option>
+            <option value="desc">High → Low</option>
+          </select>
 
-          <h4>Dates</h4>
-          <input type="date">
+          <button type="submit" class="search-btn">Search</button>
+        </form>
 
-          <h4>Price (Php)</h4>
-          <div class="price-range">
-            <input type="range" min="500" max="2000" value="1000">
-            <div class="range-labels">
-              <span>500</span><span>2000</span>
-            </div>
-          </div>
-
-          <h4>How many pets?</h4>
-          <div class="counter">
-            <label>Small Dog</label>
-            <div class="count-btns">
-              <button>-</button><span>0</span><button>+</button>
-            </div>
-          </div>
-          <div class="counter">
-            <label>Medium Dog</label>
-            <div class="count-btns">
-              <button>-</button><span>0</span><button>+</button>
-            </div>
-          </div>
-
-          <h4>Advanced Filters</h4>
-          <ul class="advanced-filters">
-            <li><input type="checkbox">Sitter has no other pets</li>
-            <li><input type="checkbox">Sitter has no dogs</li>
-            <li><input type="checkbox">Sitter has no cats</li>
-            <li><input type="checkbox">Sitter accepts only 1 client at a time</li>
-          </ul>
+        <!-- Results (populated by JS) -->
+        <div class="results-grid" id="resultsGrid">
+          <p>Start by searching for pet sitters.</p>
         </div>
-      </aside>
+      </div>
 
-      <!-- CENTER LIST OF PET SITTERS -->
-      <section class="sitter-list">
-        <h3>All pet sitters:</h3>
+      <!-- My Bookings -->
+      <div class="dashboard-card">
+        <h2>📅 My Bookings</h2>
 
-        <div class="sitter-card">
-          <img src="{% static 'assets/owner1.jpg' %}" alt="Cristopher" class="sitter-photo">
-          <div class="sitter-info">
-            <div class="sitter-header">
-              <h4>Cristopher</h4>
-              <span class="new-sitter">NEW SITTER</span>
-            </div>
-            <p>Social guy who loves pets</p>
-            <p class="distance">1.2km away</p>
-            <div class="rating">★★★★★ <span>(3 reviews)</span></div>
+        {% if bookings %}
+          <div class="booking-list">
+            {% for booking in bookings %}
+              <div class="booking-card">
+                <h4>{{ booking.sitter.sitter.first_name }} {{ booking.sitter.sitter.last_name }}</h4>
+                <p><strong>Dates:</strong> {{ booking.start_date }} → {{ booking.end_date }}</p>
+                <p><strong>Hours per Day:</strong> {{ booking.hours_per_day }}</p>
+                <p><strong>Pets:</strong>
+                  {% for pet in booking.pets.all %}
+                    {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </p>
+                <p><strong>Total:</strong> ₱{{ booking.total_price }}</p>
+                <span class="booking-status {{ booking.status }}">{{ booking.status|title }}</span>
+              </div>
+            {% endfor %}
           </div>
-          <div class="price">
-            <span>from Php</span>
-            <h4>665 / day</h4>
-          </div>
-        </div>
+        {% else %}
+          <p>No bookings yet. Start by booking a sitter!</p>
+        {% endif %}
+      </div>
 
-        <div class="sitter-card">
-          <img src="{% static 'assets/sara.jpg' %}" alt="Sara" class="sitter-photo">
-          <div class="sitter-info">
-            <h4>Sara</h4>
-            <p>loving and reliable pet care</p>
-            <p class="distance">0.5km away</p>
-            <div class="rating">★★★★★ <span>(10 reviews)</span></div>
-          </div>
-          <div class="price">
-            <span>from Php</span>
-            <h4>870 / day</h4>
-          </div>
-        </div>
-      </section>
-
-      <!-- RIGHT SAVED SITTERS -->
-      <aside class="saved-sitters">
-        <h4>Saved Pet Sitters:</h4>
+      <!-- Saved Sitters -->
+      <div class="dashboard-card">
+        <h2>❤️ Saved Sitters</h2>
         <div class="saved-box">
           <p>No saved sitters yet.</p>
         </div>
-      </aside>
+      </div>
     </section>
   </main>
+  <script>
+    const fetchSittersURL = "/dashboard/owner/fetch_sitters/";
+  </script>
+  <script src="{% static 'js/pet_owner_dashboardv2.js' %}"></script>
 </body>
 </html>
