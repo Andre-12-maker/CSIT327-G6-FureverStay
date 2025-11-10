@@ -16,12 +16,13 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key secret in production!
-SECRET_KEY = 'django-insecure-4&$j+tur2i5$1r9p7oq5unz6-#odldv*dirnf2v&k8b&27-^rd'
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-DEBUG = True  # ✅ Keep True for development; set False for production
-
-ALLOWED_HOSTS = []  # ✅ Add your domain or server IP when deploying
-
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ".onrender.com").split(",")
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com'
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 # --- MIDDLEWARE ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,12 +113,10 @@ USE_TZ = True
 
 
 # --- STATIC FILES ---
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR /"static",
-]
+STATICFILES_DIRS = [BASE_DIR / "static"] if os.path.exists(BASE_DIR / "static") else []
 STATIC_ROOT = BASE_DIR / "staticfiles"  # for production collectstatic
-
 
 # --- DEFAULT PRIMARY KEY FIELD ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

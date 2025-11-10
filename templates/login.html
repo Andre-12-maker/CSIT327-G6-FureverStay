@@ -7,6 +7,7 @@
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal login-modal">
   <div class="modal-content">
+      <a href="{% url 'home' %}" class="close-modal">✖</a>
     <h2>Login to FureverStay</h2>
     <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}

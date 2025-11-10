@@ -316,6 +316,24 @@ body {
   color: var(--text-dark);
   font-weight: 500;
 }
+h4 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.rate {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.error {
+  text-align: center;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 1rem;
+}
 
 
 

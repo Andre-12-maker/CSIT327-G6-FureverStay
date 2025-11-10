@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const showModal = document.getElementById(showId);
       if (showModal) showModal.classList.add("show");
     }
+
+    // Prevent background scroll when a modal is shown
+    const anyVisibleModal = document.querySelector(".modal.show");
+    document.body.style.overflow = anyVisibleModal ? "hidden" : "";
   }
 
   // Header buttons (global behavior)
@@ -19,10 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loginBtn.addEventListener("click", (e) => {
       const modal = document.getElementById("loginModal");
       if (modal) {
-        // If login modal exists on this page, open it
         toggleModal(null, "loginModal");
       } else {
-        // Otherwise redirect to login page (data-url on button)
         const url = loginBtn.dataset.url;
         if (url) window.location.href = url;
       }
@@ -33,10 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     registerBtn.addEventListener("click", (e) => {
       const modal = document.getElementById("registerModal");
       if (modal) {
-        // If register modal exists on this page, open it
         toggleModal(null, "registerModal");
       } else {
-        // Otherwise redirect to register page (data-url on button)
         const url = registerBtn.dataset.url;
         if (url) window.location.href = url;
       }
@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----- Register page specific behavior -----
-  // Only define the register-page functions if the register modal exists
   if (document.getElementById("registerModal")) {
     // Pet sitter/owner modal toggles
     window.openPetSitter = () => toggleModal("registerModal", "petSitterModal");
@@ -66,10 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Success modals
-    window.showSuccessPetSitter = () =>
-      toggleModal("petSitterModal", "successPetSitterModal");
-    window.showSuccessPetOwner = () =>
-      toggleModal("petOwnerModal", "successPetOwnerModal");
+    window.showSuccessPetSitter = () => toggleModal("petSitterModal", "successPetSitterModal");
+    window.showSuccessPetOwner = () => toggleModal("petOwnerModal", "successPetOwnerModal");
 
     window.closeSuccessPetSitter = () => {
       toggleModal("successPetSitterModal", null);
@@ -125,28 +122,17 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.querySelector("#owner-step1").style.display = "block";
       }
     };
-
-    // Click-outside closes register-related modals
-    window.addEventListener("click", (e) => {
-      const modals = [
-        "registerModal",
-        "petSitterModal",
-        "petOwnerModal",
-        "successPetSitterModal",
-        "successPetOwnerModal",
-      ];
-      modals.forEach((id) => {
-        const modal = document.getElementById(id);
-        if (modal && e.target === modal) modal.classList.remove("show");
-      });
-    });
   }
-
-  // If this page has a login modal, add outside-click close
-  if (document.getElementById("loginModal")) {
-    const loginModal = document.getElementById("loginModal");
-    window.addEventListener("click", (e) => {
-      if (e.target === loginModal) loginModal.classList.remove("show");
-    });
-  }
+  // Optional: ESC key closes any modal
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const openModal = document.querySelector(".modal.show");
+      if (openModal) {
+        openModal.classList.remove("show");
+        document.body.classList.remove("modal-open");
+        // Redirect to home
+        window.location.href = "/";
+      }
+    }
+  });
 });

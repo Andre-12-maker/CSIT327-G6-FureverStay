@@ -7,6 +7,7 @@
 <!-- REGISTER MODAL -->
 <div id="registerModal" class="modal register-modal show">
   <div class="modal-content">
+    <a href="{% url 'home' %}" class="close-modal">✖</a>
     <div class="modal-image">
       <img src="{% static 'assets/catdog.png' %}" alt="Cat and Dog">
     </div>
@@ -24,6 +25,7 @@
 <!-- PET SITTER REGISTRATION MODAL -->
 <div id="petSitterModal" class="modal registration-modal">
   <div class="modal-content">
+    <a href="{% url 'home' %}" class="close-modal">✖</a>
     <div class="modal-image">
       <img src="{% static 'assets/petsitter.png' %}" alt="Pet Sitter Registration">
     </div>
@@ -89,6 +91,7 @@
 <!-- PET OWNER REGISTRATION MODAL -->
 <div id="petOwnerModal" class="modal registration-modal">
   <div class="modal-content">
+    <a href="{% url 'home' %}" class="close-modal">✖</a>
     <div class="modal-image">
       <img src="{% static 'assets/petowner.png' %}" alt="Pet Owner Registration">
     </div>

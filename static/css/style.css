@@ -342,6 +342,7 @@ body, html {
   font-weight: 700;
   font-size: 24px;
   color: #333;
+  margin-top: 50px;
 }
 
 /* ------------------------------------------------------------- */
@@ -399,8 +400,9 @@ body, html {
 /* Name row for first and last name side by side */
 .registration-modal .name-row {
   display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
+  justify-content: space-between;
+  gap: 50px;
+  width: 100%;
 }
 
 .registration-modal .input-group {
@@ -416,7 +418,6 @@ body, html {
 }
 
 .registration-modal .modal-text input {
-  width: 80%;
   height: 40px;
   margin-bottom: 12px;
   border-radius: 14px;
@@ -425,6 +426,7 @@ body, html {
   padding: 0 14px;
   font-size: 15px;
 }
+
 
 /* === INPUT VALIDATION POPUPS === */
 .rules-popup {
@@ -449,6 +451,7 @@ body, html {
   display: flex;
   justify-content: space-between;
   margin-top: 18px;
+  gap: 100px;
 }
 
 .button-group .text-button {
@@ -456,7 +459,7 @@ body, html {
   color: #fff;
   font-weight: 600;
   font-size: 16px;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 10px 28px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -621,6 +624,18 @@ body, html {
 .login-modal .register-link span:hover {
   text-decoration: underline;
 }
+/* Close Button (✖) */
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 17px;
+  color: var(--btn-color);
+}
+
+.close-modal:hover {
+  color: var(--btn-hover);
+}
 
 /* === Responsive Adjustments for Login === */
 @media (max-width: 768px) {
@@ -632,4 +647,93 @@ body, html {
     transform: translateX(-50%);
     padding: 1.5rem;
   }
+}
+/* ========================================================= */
+/* [GLOBAL MODAL OVERLAY FIX] */
+/* ========================================================= */
+
+/* Fullscreen dark overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* hidden by default */
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6); /* dark overlay */
+  backdrop-filter: blur(3px); /* subtle blur effect */
+  z-index: 9999; /* always above everything */
+}
+
+/* When active, show modal */
+.modal.show {
+  display: flex;
+}
+
+/* Lock background scrolling (handled in JS) */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Centered content box */
+.modal-content {
+  position: relative;
+  background-color: var(--modal-bg, #fff);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 480px;
+  max-width: 90%;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+  color: #000;
+  text-align: center;
+  z-index: 10000;
+  animation: modal-pop 0.25s ease; /* subtle pop animation */
+}
+
+/* Pop-in animation */
+@keyframes modal-pop {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Close button (X) top-right */
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 10001;
+}
+
+.close-modal:hover {
+  color: var(--btn-hover, #007bff);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+.modal {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: all;
 }
