@@ -169,6 +169,7 @@ git fetch origin && git merge origin/main
 - Andre Policios (andre.policios@cit.edu) - Backend Developer
 
 # Deployed Links
-TBA
+fureverstay.onrender.com
+
 
 
