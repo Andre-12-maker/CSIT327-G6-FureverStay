@@ -11,6 +11,7 @@ from PetOwnerDashboard.models import Booking
 from django.views.decorators.http import require_GET
 from datetime import datetime
 from django.contrib.auth.models import User
+from RegistrationPage.supabase_client import supabase
 
 # --- Dashboard (View-only) ---
 @login_required
@@ -47,8 +48,23 @@ def sitter_profile(request):
         sitter_profile.hourly_rate = request.POST.get("hourly_rate") or None
         sitter_profile.experience_years = request.POST.get("experience_years") or None
 
+        # ---- Upload profile image to Supabase (override mode) ----
         if "profile_image" in request.FILES:
-            sitter_profile.profile_image = request.FILES["profile_image"]
+            file = request.FILES["profile_image"]
+
+            # Always use the same filename to overwrite existing image
+            path = f"sitter_profiles/{request.user.id}/profile.jpg"
+
+            # Upload with upsert=True to override the file
+            supabase.storage.from_("sitter_profiles").upload(
+                path,
+                file.read(),
+                {"upsert": "true"}
+            )
+
+            # Get public URL
+            url = supabase.storage.from_("sitter_profiles").get_public_url(path)
+            sitter_profile.profile_image_url = url
 
         sitter_profile.save()
         messages.success(request, "Profile updated successfully!")
@@ -59,6 +75,7 @@ def sitter_profile(request):
         "profile": profile,
     }
     return render(request, "pet_sitter_profile.html", context)
+
 
 
 # ================================================================

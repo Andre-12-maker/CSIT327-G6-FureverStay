@@ -43,10 +43,10 @@
         {% csrf_token %}
 
         <div class="profile-image">
-            {% if sitter_profile.profile_image %}
-            <img src="{{ sitter_profile.profile_image.url }}" alt="Profile Picture">
+            {% if sitter_profile.profile_image_url %}
+                <img src="{{ sitter_profile.profile_image_url }}" alt="Profile Picture">
             {% else %}
-            <img src="{% static 'images/default_profile.png' %}" alt="Default">
+                <img src="{% static 'images/default_profile.png' %}" alt="Default">
             {% endif %}
             <input type="file" name="profile_image">
         </div>

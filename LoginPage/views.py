@@ -77,7 +77,7 @@ def password_reset_request(request):
         # Send reset email
         subject = "Password Reset Request - FureverStay"
         message = (
-            f"Hi {user.username},\n\n"
+            f"Hi {user.first_name} {user.last_name},\n\n"
             f"Click the link below to reset your password:\n{reset_url}\n\n"
             f"If you didn’t request this, please ignore this email."
         )

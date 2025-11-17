@@ -42,7 +42,7 @@
     <!-- Header Section -->
     <section class="profile-header">
       <img 
-        src="{% if sitter_profile and sitter_profile.profile_image %}/media/{{ sitter_profile.profile_image }}{% else %}{% static 'assets/default_profile.png' %}{% endif %}" 
+        src="{% if sitter_profile and sitter_profile.profile_image_url %}{{ sitter_profile.profile_image_url }}{% else %}{% static 'assets/default_profile.png' %}{% endif %}" 
         alt="{{ profile.first_name }}'s Photo"
       >
       <div class="profile-info">
