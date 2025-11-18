@@ -119,9 +119,7 @@ def fetch_sitters(request):
             "availability": sitter.get("availability") or "Not specified",
             "hourly_rate": rate,
             "experience_years": sitter.get("experience_years") or 0,
-            "profile_image": (
-                f"/media/{sitter['profile_image']}" if sitter.get("profile_image") else "/static/assets/default_profile.png"
-            ),
+            "profile_image_url": sitter.get("profile_image_url") or "/static/assets/default_profile.png",
         })
 
     return JsonResponse({"sitters": filtered})

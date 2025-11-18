@@ -59,7 +59,7 @@
               .map(
                 (s) => `
               <div class="sitter-card">
-                <img src="${s.profile_image || '/static/assets/default_sitter.jpg'}" alt="Sitter">
+                <img src="${s.profile_image_url || '/static/assets/default_sitter.jpg'}" alt="Sitter">
                 <div class="sitter-info">
                   <h4>${s.first_name} ${s.last_name}</h4>
                   <p>${s.bio || 'No bio provided.'}</p>
