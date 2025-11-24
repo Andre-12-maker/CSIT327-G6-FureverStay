@@ -122,11 +122,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"  # for production collectstatic
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- EMAIL BACKEND ---
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "apikey" 
+# --- EMAIL BACKEND for local only ---
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#EMAIL_HOST = "smtp.sendgrid.net"
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True
+#EMAIL_HOST_USER = "apikey" 
+# -- for RENDER deploymenr --
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 EMAIL_HOST_PASSWORD = os.getenv("SENDGRID_API_KEY")
 DEFAULT_FROM_EMAIL = os.getenv("FROM_EMAIL")
