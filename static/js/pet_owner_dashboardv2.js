@@ -52,31 +52,31 @@
         // Sort by price
         if (sortOrder === "asc") sitters.sort((a, b) => a.hourly_rate - b.hourly_rate);
         if (sortOrder === "desc") sitters.sort((a, b) => b.hourly_rate - a.hourly_rate);
-
-        // Display sitter cards
         resultsGrid.innerHTML = sitters.length
-          ? sitters
-              .map(
-                (s) => `
-              <div class="sitter-card">
-                <img src="${s.profile_image_url || '/static/assets/default_sitter.jpg'}" alt="Sitter">
-                <div class="sitter-info">
-                  <h4>${s.first_name} ${s.last_name}</h4>
-                  <p>${s.bio || 'No bio provided.'}</p>
-                  <p>📍 ${s.address || 'No address'}</p>
-                  <p>🕒 Availability: ${s.availability || 'Not specified'}</p>
-                  <p class="sitter-rate">₱${s.hourly_rate || '—'} / hr</p>
+          ? sitters.map((s) => {
+              const img = s.profile_image_url || "/static/assets/default_profile.png";
+              const isSaved = window.savedSitters?.includes(s.sitter_id);
+              const saveButtonHTML = isSaved
+                  ? `<button class="save-btn saved" data-id="${s.sitter_id}">✓ Saved</button>`
+                  : `<button class="save-btn" data-id="${s.sitter_id}">♡ Save</button>`;
+              return `
+                <div class="sitter-card">
+                    <img src="${img}" alt="Sitter">
+                    <div class="sitter-info">
+                        <h4>${s.first_name} ${s.last_name}</h4>
+                        <p>${s.bio || 'No bio provided.'}</p>
+                        <p>📍 ${s.address || 'No address'}</p>
+                        <p>🕒 Availability: ${s.availability || 'Not specified'}</p>
+                        <p class="sitter-rate">₱${s.hourly_rate || '—'} / hr</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="view-profile-btn" data-sitter-id="${s.sitter_id}">View Profile</button>
+                        ${saveButtonHTML}
+                    </div>
                 </div>
-                <div class="card-actions">
-                  <button class="view-profile-btn" data-sitter-id="${s.sitter_id}">View Profile</button>
-                  <button class="save-btn">♡ Save</button>
-                </div>
-              </div>
-            `
-              )
-              .join("")
+              `;
+          }).join("")
           : `<p>No sitters found.</p>`;
-
         // Click event to view profile
         document.querySelectorAll(".view-profile-btn").forEach((btn) => {
           btn.addEventListener("click", (e) => {
@@ -243,3 +243,53 @@ document.addEventListener("DOMContentLoaded", () => {
     calculateTotal();
   }
 });
+
+//saved sitters loading
+function loadSavedSitters() {
+    fetch("/dashboard/owner/saved_sitters/")
+        .then(res => res.json())
+        .then(data => {
+            renderSavedSitters(data.saved);
+            window.savedSitters = data.saved.map(s => s.id); // store IDs for toggles
+        });
+}
+function renderSavedSitters(list) {
+    const box = document.getElementById("savedSittersBox");
+    if (list.length === 0) {
+        box.innerHTML = "<p>No saved sitters yet.</p>";
+        return;
+    }
+    box.innerHTML = list.map(s => {
+        const imgSrc = s.image && s.image !== "" 
+            ? s.image 
+            : "/static/assets/default_profile.png";
+        return `
+            <div class="saved-card">
+                <img src="${imgSrc}" class="saved-img" alt="Sitter Image">
+                <h4>${s.first_name} ${s.last_name}</h4>
+                <p>${s.address}</p>
+                <p>₱${s.hourly_rate}/hr</p>
+                <button class="remove-btn" data-id="${s.id}">Remove</button>
+            </div>
+        `;
+    }).join("");
+}
+document.addEventListener("click", e => {
+    const id = e.target.dataset.id;
+
+    // UNSAVE
+    if (e.target.classList.contains("remove-btn")) {
+        fetch(`/dashboard/owner/remove_sitter/${id}/`)
+            .then(() => loadSavedSitters());
+    }
+
+    // SAVE from search results
+    if (e.target.classList.contains("save-btn")) {
+        fetch(`/dashboard/owner/save_sitter/${id}/`)
+            .then(() => loadSavedSitters());
+    }
+});
+document.addEventListener("DOMContentLoaded", () => {
+    loadSavedSitters();
+});
+

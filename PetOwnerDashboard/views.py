@@ -8,7 +8,8 @@ import os
 from RegistrationPage.models import Profile, PetSitterProfile
 from django.contrib import messages
 from datetime import datetime
-from .models import Booking 
+from .models import Booking, SavedSitter
+from django.contrib.auth.models import User
 
 # ✅ Optional: import if you have availability model
 from PetSitterDashboard.models import SitterAvailability  
@@ -217,4 +218,47 @@ def create_booking(request, sitter_id):
         return redirect('pet_owner_dashboard')
 
     return redirect('view_sitter_profile', sitter_id=sitter_id)
+
+#Save / Remove Saved Sitter
+@login_required
+def save_sitter(request, sitter_id):
+    sitter = User.objects.get(id=sitter_id)
+
+    SavedSitter.objects.get_or_create(
+        owner=request.user,
+        sitter=sitter
+    )
+
+    return JsonResponse({"status": "saved"})
+
+@login_required
+def remove_saved_sitter(request, sitter_id):
+    SavedSitter.objects.filter(
+        owner=request.user,
+        sitter_id=sitter_id
+    ).delete()
+
+    return JsonResponse({"status": "removed"})
+
+@login_required
+def get_saved_sitters(request):
+    saved = SavedSitter.objects.filter(owner=request.user).select_related("sitter", "sitter__profile", "sitter__sitter_profile")
+
+    sitter_list = []
+
+    for s in saved:
+        sitter_profile = getattr(s.sitter, "sitter_profile", None)
+        profile = s.sitter.profile  
+
+        sitter_list.append({
+            "id": s.sitter.id,
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "address": profile.address,
+            "hourly_rate": sitter_profile.hourly_rate if sitter_profile else None,
+            "image": sitter_profile.profile_image_url if sitter_profile else "/static/assets/default_profile.png",
+        })
+
+    return JsonResponse({"saved": sitter_list})
+
 

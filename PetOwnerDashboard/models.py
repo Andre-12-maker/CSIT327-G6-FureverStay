@@ -22,3 +22,14 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.owner.username} → {self.sitter.profile.user.username} ({self.status})"
+    
+class SavedSitter(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="saved_sitters")
+    sitter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="saved_by")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('owner', 'sitter')
+
+    def __str__(self):
+        return f"{self.owner.username} saved {self.sitter.username}"
