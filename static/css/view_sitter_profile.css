@@ -335,5 +335,80 @@ h4 {
   margin-top: 1rem;
 }
 
+.reviews-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.average-rating {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.average-rating .stars {
+  color: gold;
+  margin-left: 10px;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  background: #fafafa;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.review-card p {
+  margin: 4px 0;
+}
+
+.review-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+.submit-review-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.submit-review-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.submit-review-section select,
+.submit-review-section textarea {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.submit-review-btn {
+  padding: 10px;
+  background: #00a8ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.submit-review-btn:hover {
+  background: #0085cc;
+}
 
 

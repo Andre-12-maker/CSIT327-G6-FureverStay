@@ -51,3 +51,14 @@ class PetSitterProfile(models.Model):
 
     def __str__(self):
         return f"{self.sitter.username}'s Sitter Profile"
+
+#Sitter reviews
+class SitterReview(models.Model):
+    sitter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="given_reviews")
+    rating = models.PositiveSmallIntegerField(default=5)  # 1-5 stars
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.reviewer.username} → {self.sitter.username}: {self.rating}★"

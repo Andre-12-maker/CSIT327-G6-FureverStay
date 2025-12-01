@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from RegistrationPage.models import Pet
+from django.db import models
 from django.http import JsonResponse
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
-from RegistrationPage.models import Profile, PetSitterProfile
+from RegistrationPage.models import Profile, PetSitterProfile, Pet, SitterReview
 from django.contrib import messages
 from datetime import datetime
 from .models import Booking, SavedSitter
@@ -143,14 +143,18 @@ def view_sitter_profile(request, sitter_id):
     sitter_profile_query = supabase.table("RegistrationPage_petsitterprofile").select("*").eq("sitter_id", profile["user_id"]).execute()
     sitter_profile = sitter_profile_query.data[0] if sitter_profile_query.data else None
     pets = Pet.objects.filter(owner=request.user)
-
+    # ✅ Fetch reviews for this sitter
+    reviews = SitterReview.objects.filter(sitter_id=sitter_id).select_related("reviewer").order_by("-created_at")
+    avg_rating = reviews.aggregate(avg=models.Avg("rating"))["avg"] or 0
+    avg_rating = round(avg_rating, 1)
     context = {
         "profile": profile,
         "sitter_profile": sitter_profile,
         "pets": pets,  
         "sitter_id": sitter_id,
+        "reviews": reviews,        
+        "avg_rating": avg_rating,
     }
-
     return render(request, "view_sitter_profile.html", context)
 
 

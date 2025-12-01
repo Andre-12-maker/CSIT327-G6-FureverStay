@@ -1,7 +1,7 @@
 from django.db import models
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from RegistrationPage.models import PetSitterProfile, Profile
+from RegistrationPage.models import PetSitterProfile, Profile, SitterReview
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -41,7 +41,9 @@ def pet_sitter_dashboard(request):
 def sitter_profile(request):
     sitter_profile, created = PetSitterProfile.objects.get_or_create(sitter=request.user)
     profile = Profile.objects.filter(user=request.user).first()
-
+    reviews = SitterReview.objects.filter(sitter_id=request.user.id).select_related('reviewer').order_by('-created_at')
+    avg_rating = reviews.aggregate(avg=models.Avg("rating"))["avg"] or 0
+    avg_rating = round(avg_rating, 1)
     if request.method == "POST":
         sitter_profile.bio = request.POST.get("bio", "")
         sitter_profile.availability = request.POST.get("availability", "")
@@ -73,6 +75,8 @@ def sitter_profile(request):
     context = {
         "sitter_profile": sitter_profile,
         "profile": profile,
+        "reviews": reviews,
+        "avg_rating": avg_rating,
     }
     return render(request, "pet_sitter_profile.html", context)
 

@@ -70,6 +70,22 @@
         <button type="submit" class="save-btn">Save Changes</button>
         </form>
     </section>
+    <section class="reviews-section">
+        <h3>Reviews from Pet Owners</h3>
+        <p>Average rating: {{ avg_rating }} ⭐</p>
+
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="review-card">
+                    <p><b>{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}</b> - {{ review.rating }} ⭐</p>
+                    <p>{{ review.comment }}</p>
+                    <p class="review-date">{{ review.created_at|date:"M d, Y, h:i A" }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No reviews yet.</p>
+        {% endif %}
+    </section>
     </main>
 
 

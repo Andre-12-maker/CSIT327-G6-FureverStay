@@ -191,3 +191,23 @@ nav a.active {
     width: 100%;
   }
 }
+.reviews-section {
+    margin-top: 2rem;
+}
+
+.review-card {
+    background-color: #f8f8f8;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.review-card p {
+    margin: 0.3rem 0;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: #888;
+}
