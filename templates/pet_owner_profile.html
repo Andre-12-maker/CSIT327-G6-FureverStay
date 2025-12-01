@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Owner Profile</title>
+    <link rel="stylesheet" href="{% static 'css/pet_owner_profile.css' %}">
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <div class="logo-section">
+        <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+    </div>
+
+    <nav>
+        <a href="{% url 'pet_owner_dashboard' %}">HOME</a>
+        <a href="{% url 'pet_owner_profile' %}" class="active">PROFILE</a>
+        <a href="#">ABOUT US</a>
+    </nav>
+
+    <div class="user-menu">
+        <button class="dropdown-btn" id="userDropdown">
+            {{ request.user.first_name }} <span class="arrow">▼</span>
+        </button>
+        <div class="dropdown-content" id="dropdownContent">
+            <a href="{% url 'pet_owner_profile' %}">My Profile</a>
+            <a href="#">My Bookings</a>
+            <a href="#">Messages</a>
+            <a href="#">Settings</a>
+            <hr />
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+<section class="profile-wrapper">
+    <h2>My Profile</h2>
+
+    <div class="profile-info-box">
+
+        <p><b>Name:</b> {{ profile.first_name }} {{ profile.last_name }}</p>
+        <p><b>Email:</b> {{ profile.email }}</p>
+        <p><b>Address:</b> {{ profile.address }}</p>
+
+        <hr>
+
+        <h3>Your Pets</h3>
+
+        <!-- PET LIST -->
+        <div class="pet-list">
+            {% if pets %}
+                {% for pet in pets %}
+                    <div class="pet-card">
+                        <h4>{{ pet.name }}</h4>
+                        <p><b>Species:</b> {{ pet.species }}</p>
+                        <p><b>Breed:</b> {{ pet.breed }}</p>
+                        <p><b>Age:</b> {{ pet.age }} years</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-pets">You have no pets added yet.</p>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <!-- ADD NEW PET FORM -->
+        <h3>Add New Pet</h3>
+
+        <form method="POST" class="add-pet-form">
+            {% csrf_token %}
+            
+            <label><b>Pet Name:</b></label>
+            <input type="text" name="name" required>
+
+            <label><b>Pet Type:</b></label>
+            <select name="pet_type" required>
+                <option value="">Select type</option>
+                <option>Dog</option>
+                <option>Cat</option>
+                <option>Bird</option>
+                <option>Rabbit</option>
+                <option>Other</option>
+            </select>
+
+            <label><b>Breed:</b></label>
+            <input type="text" name="breed">
+
+            <label><b>Age (years):</b></label>
+            <input type="number" name="age" min="0">
+
+            <button type="submit" class="save-btn">Add Pet</button>
+        </form>
+
+    </div>
+</section>
+</main>
+
+<script>
+    document.getElementById("userDropdown").addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("dropdownContent").classList.toggle("show");
+    });
+
+    window.addEventListener("click", function (e) {
+        if (!e.target.closest(".user-menu")) {
+            document.getElementById("dropdownContent").classList.remove("show");
+        }
+    });
+</script>
+
+</body>
+</html>

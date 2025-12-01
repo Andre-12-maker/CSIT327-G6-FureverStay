@@ -10,6 +10,7 @@ from django.contrib import messages
 from datetime import datetime
 from .models import Booking, SavedSitter
 from django.contrib.auth.models import User
+from DashboardPage.models import Notification
 
 # ✅ Optional: import if you have availability model
 from PetSitterDashboard.models import SitterAvailability  
@@ -210,7 +211,18 @@ def create_booking(request, sitter_id):
             total_price=total_price,
         )
         booking.pets.set(selected_pets)
-
+        # 🔔 Create notification for the pet owner
+        Notification.objects.create(
+            owner=request.user,
+            message=f"Your booking request for {sitter.sitter.profile.first_name} has been sent.",
+            type="booking"
+        )
+        # 🔔 Notify the sitter too (optional)
+        Notification.objects.create(
+            owner=sitter.sitter,  # the pet sitter user
+            message=f"You received a new booking request from {request.user.first_name}.",
+            type="booking"
+        )
         messages.success(
             request,
             f"Booking sent to {sitter.sitter.profile.first_name}! ({num_pets} pets) Total ₱{total_price:.2f}"
@@ -261,4 +273,44 @@ def get_saved_sitters(request):
 
     return JsonResponse({"saved": sitter_list})
 
+@login_required
+def pet_owner_profile(request):
+    # Get or create the user's Profile
+    profile, created = Profile.objects.get_or_create(user=request.user, defaults={
+        'role': 'owner',
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'email': request.user.email
+    })
 
+    # Get all pets for this owner
+    pets = Pet.objects.filter(owner=request.user)
+
+    if request.method == "POST":
+        # Check if it's the "Add Pet" form
+        if 'name' in request.POST:
+            pet_name = request.POST.get("name")
+            species = request.POST.get("pet_type")
+            breed = request.POST.get("breed")
+            age = request.POST.get("age") or 0
+
+            Pet.objects.create(
+                owner=request.user,
+                pet_name=pet_name,
+                species=species,
+                breed=breed,
+                age=age
+            )
+            Notification.objects.create(
+                owner=request.user,
+                message=f"You added a new pet: {pet_name}.",
+                type="pet_added"
+            )
+            messages.success(request, f"{pet_name} added successfully!")
+            return redirect("pet_owner_profile")
+    context = {
+        "profile": profile,
+        "pets": pets,
+    }
+
+    return render(request, "pet_owner_profile.html", context)

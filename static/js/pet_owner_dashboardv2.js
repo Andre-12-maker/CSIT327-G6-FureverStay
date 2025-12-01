@@ -293,3 +293,45 @@ document.addEventListener("DOMContentLoaded", () => {
     loadSavedSitters();
 });
 
+//notifications
+document.addEventListener("DOMContentLoaded", function () {
+  const bell = document.getElementById("notifBell");
+  const dropdown = document.getElementById("notifDropdown");
+  const notifList = document.getElementById("notifList");
+  const notifCount = document.getElementById("notifCount");
+  const markAllBtn = document.getElementById("markAllBtn");
+  window.loadNotifications = async function () {
+    const res = await fetch("/dashboard/notifications/");
+    const data = await res.json();
+    notifList.innerHTML = "";
+    let unreadCount = 0;
+    data.notifications.forEach(notif => {
+      if (!notif.is_read) unreadCount++;
+      notifList.innerHTML += `
+        <li class="notif-item ${notif.is_read ? '' : 'unread'}">
+          ${notif.message}
+          <br>
+          <small>${notif.created_at}</small>
+        </li>
+      `;
+    });
+    if (unreadCount > 0) {
+      notifCount.textContent = unreadCount;
+      notifCount.classList.remove("hidden");
+    } else {
+      notifCount.classList.add("hidden");
+    }
+  };
+  // Toggle dropdown
+  bell.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+    loadNotifications();
+  });
+  // Mark all as read
+  markAllBtn?.addEventListener("click", async () => {
+    await fetch("/dashboard/notifications/mark-all/");
+    loadNotifications();
+    notifCount.classList.add("hidden");
+  });
+  loadNotifications();
+});

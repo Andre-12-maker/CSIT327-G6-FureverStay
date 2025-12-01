@@ -379,3 +379,84 @@ body {
 .remove-btn:hover {
     background: #e75959;
 }
+/* notifications */
+.notification-wrapper {
+  position: relative;
+  margin-right: 20px;
+}
+
+.notif-bell {
+  cursor: pointer;
+  font-size: 22px;
+  position: relative;
+}
+
+.notif-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  width: 260px;
+  max-height: 350px;
+  overflow-y: auto;
+  background: #fbeaea;
+  border: 1px solid #8b5e5e;
+  color: #8b5e5e;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+.notif-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notif-item {
+  padding: 8px;
+  margin-top: 5px;
+  border-bottom: 1px solid #f8d7da;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.notif-item.unread {
+  background: #e5a4a4;
+  font-weight: bold;
+  color: white;
+}
+.mark-all-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.mark-all-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+.mark-all-btn:hover {
+  background: var(--secondary);
+}
