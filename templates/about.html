@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | FureverStay</title>
+
+    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}">
+
+</head>
+<body>
+
+    <!-- NAVBAR (same style as owner dashboard) -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+            <h1 class="brand">FureverStay</h1>
+        </div>
+
+        <div class="nav-right">
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/about/">About Us</a>
+            <a href="/contact/">Contact</a>
+
+            <div class="dropdown">
+                <button id="userDropdown">Profile ▼</button>
+                <div id="dropdownContent" class="dropdown-content">
+                    <a href="/profile/">My Profile</a>
+                    <a href="/logout/">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <section class="about-wrapper">
+
+        <div class="about-card">
+            <h2>Our Mission</h2>
+            <p>
+                At FureverStay, our mission is to connect pet owners with trusted, 
+                reliable, and verified pet sitters who treat every pet like family.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <h2>Who We Are</h2>
+            <p>
+                We are a passionate team dedicated to ensuring safe, convenient, 
+                and premium pet-care experiences. Whether you’re heading out for a trip 
+                or working long hours, we make sure your pets receive the attention 
+                they deserve.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <h2>Why Choose Us</h2>
+            <ul>
+                <li>✔ Verified and Trusted Sitters</li>
+                <li>✔ Transparent Reviews and Profiles</li>
+                <li>✔ Safe, Secure, and Pet-Focused System</li>
+                <li>✔ Designed with love for pet parents</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <script src="{% static 'js/pet_owner_dashboard.js' %}"></script>
+</body>
+</html>

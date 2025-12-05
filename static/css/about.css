@@ -1,0 +1,126 @@
+/* GENERAL */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f8ff;
+    color: #333;
+}
+
+/* NAVBAR */
+.navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #4a8fff, #2d6bff);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-right a {
+    color: #dce7ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: .3s;
+}
+
+.nav-right a:hover {
+    color: #fff;
+}
+
+/* DROPDOWN */
+.dropdown {
+    position: relative;
+}
+
+#userDropdown {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    min-width: 150px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    color: #333;
+    transition: .3s;
+}
+
+.dropdown-content a:hover {
+    background: #f1f5ff;
+}
+
+.show {
+    display: block;
+}
+
+/* ABOUT US CONTAINER */
+.about-wrapper {
+    max-width: 1100px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 0 25px;
+}
+
+/* ABOUT CARDS */
+.about-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    border-left: 6px solid #4a8fff;
+}
+
+.about-card h2 {
+    margin: 0 0 10px;
+    color: #2d6bff;
+}
+
+.about-card p,
+.about-card li {
+    line-height: 1.6;
+}
+
+/* LIST STYLING */
+.about-card ul {
+    padding-left: 20px;
+}
