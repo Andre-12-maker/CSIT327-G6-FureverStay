@@ -9,143 +9,146 @@
     <link rel="stylesheet" href="{% static 'css/pet_sitter_dashboard.css' %}">
 </head>
 <body>
-    <!-- 🧭 Navbar -->
-    <header class="navbar">
-        <div class="logo-section">
-            <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+    <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo-section">
+      <img src="{% static 'assets/logo-removebg.png' %}" alt="FureverStay Logo" class="logo">
+    </div>
+
+    <nav class="nav-links">
+      <a href="{% url 'pet_sitter_dashboard' %}" class="active">HOME</a>
+      <a href="{% url 'sitter_profile' %}">PROFILE</a>
+      <a href="#">ABOUT US</a>
+    </nav>
+
+    <div class="user-menu">
+       <button class="dropdown-btn" id="userDropdown">
+        {{ request.user.first_name }}<span class="arrow">▼</span>
+      </button>
+      <div class="dropdown-content" id="dropdownContent" aria hidden="true">
+        <a href="{% url 'sitter_profile' %}">My Profile</a>
+        <a href="#">My Bookings</a>
+        <a href="#">Settings</a>
+        <hr />
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+      </div>
+    </div>
+    <div class="notification-wrapper">
+      <div id="notifBell" class="notif-bell">
+        🔔<span id="notifCount" class="notif-count hidden">0</span>
+      </div>
+      <div class="notif-dropdown hidden" id="notifDropdown">
+        <ul id="notifList"></ul>
+        <div class="mark-all-container">
+          <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <!-- 📅 Calendar Section -->
+    <section class="calendar-card">
+        <div class="calendar-tabs">
+            <button class="tab-btn active" data-tab="calendar">Calendar</button>
+            <button class="tab-btn" data-tab="schedule">Schedule</button>
         </div>
 
-        <nav>
-            <a href="{% url 'pet_sitter_dashboard' %}" class="active">HOME</a>
-            <a href="{% url 'sitter_profile' %}">PROFILE</a>
-            <a href="#">ABOUT US</a>
-        </nav>
-
-        <div class="user-menu">
-            <button class="dropdown-btn" id="userDropdown">
-                {{ request.user.first_name }} <span class="arrow">▼</span>
-            </button>
-
-            <div class="dropdown-content" id="dropdownContent" aria-hidden="true">
-                <a href="{% url 'sitter_profile' %}">My Profile</a>
-                <a href="#">Bookings</a>
-                <a href="#">Messages</a>
-                <a href="#">Earnings</a>
-                <hr>
-                <a href="{% url 'logout' %}" class="logout">Logout</a>
-            </div>
-            <div class="notification-wrapper">
-                <div id="notifBell" class="notif-bell">
-                    🔔<span id="notifCount" class="notif-count hidden">0</span>
+        <div class="calendar-content">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                <button id="prevMonth">◀</button>
+                <h3 id="monthYear"></h3>
+                <button id="nextMonth">▶</button>
                 </div>
-                <div class="notif-dropdown hidden" id="notifDropdown">
-                    <ul id="notifList"></ul>
-                    <div class="mark-all-container">
-                        <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- 🏠 Main Dashboard -->
-    <main class="dashboard">
-        <!-- 📅 Calendar Section -->
-        <section class="calendar-card">
-            <div class="calendar-tabs">
-                <button class="tab-btn active" data-tab="calendar">Calendar</button>
-                <button class="tab-btn" data-tab="schedule">Schedule</button>
-            </div>
+                <table class="calendar" id="availabilityCalendar">
+                <thead>
+                    <tr>
+                    <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+                </table>
 
-            <div class="calendar-content">
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                    <button id="prevMonth">◀</button>
-                    <h3 id="monthYear"></h3>
-                    <button id="nextMonth">▶</button>
-                    </div>
-
-                    <table class="calendar" id="availabilityCalendar">
-                    <thead>
-                        <tr>
-                        <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
-                        </tr>
-                    </thead>
-                    <tbody id="calendarBody"></tbody>
-                    </table>
-
-                    <p id="availabilityMessage" class="reservations-info">
-                    Click a date to toggle “Available” / “Blocked”
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 📬 Requests / Reservations Section -->
-        <section class="reservations-section">
-        <h3>📬 Service Requests</h3>
-
-        {% if sitter_reservations %}
-            {% for booking in sitter_reservations %}
-            <div class="reservation-card">
-                <img src="{% static 'assets/default_profile.png' %}" alt="{{ booking.owner.username }}" class="owner-photo">
-                <div class="reservation-info">
-                <h4>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h4>
-                <p><b>Pets:</b>
-                    {% for pet in booking.pets.all %}
-                    {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
+                <p id="availabilityMessage" class="reservations-info">
+                 Click a date to toggle “Available” / “Blocked”
                 </p>
-                <p><b>Dates:</b> {{ booking.start_date }} → {{ booking.end_date }}</p>
-                <p><b>Hours/day:</b> {{ booking.hours_per_day }}</p>
-                <p><b>Total:</b> ₱{{ booking.total_price }}</p>
-                <p><b>Status:</b> <span class="status {{ booking.status }}">{{ booking.status|title }}</span></p>
-                </div>
-                <div class="reservation-actions">
-                {% if booking.status == "pending" %}
-                    <button class="accept-btn" data-id="{{ booking.id }}">✅ Accept</button>
-                    <button class="decline-btn" data-id="{{ booking.id }}">❌ Decline</button>
-                {% endif %}
-                </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <p>No service requests at the moment.</p>
-        {% endif %}
-        </section>
+        </div>
+    </section>
+    <section class="reservations-section">
+      <h3>📬 Service Requests</h3>
 
+      {% if sitter_reservations %}
+        {% for booking in sitter_reservations %}
+          <div class="reservation-card">
+            <!-- owner-photo kept -->
+            <img src="{% static 'assets/default_profile.png' %}"
+                 alt="{{ booking.owner.username }}"
+                 class="owner-photo">
 
-        <!-- 💰 Earnings & Messages -->
-        <aside class="messages-section">
-            <div class="earnings-card">
-                <h4>Earnings</h4>
-                <p class="earnings-amount">₱{{ total_earnings|default:"0.00" }}</p>
-                <p class="earnings-label">Total this month</p>
-            </div>
+            <div class="reservation-info">
+              <h4>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h4>
 
-            <hr style="margin:1.2rem 0;border:none;border-top:1px solid #eee;">
-
-            <h4>Recent Messages</h4>
-            {% if sitter_messages %}
-                {% for message in sitter_messages %}
-                <div class="message">
-                    <img src="{% static 'assets/default_owner.jpg' %}" alt="{{ message.sender.username }}" class="message-photo">
-                    <div class="message-text">
-                        <p><b>{{ message.sender.username }}:</b> {{ message.preview }}</p>
-                    </div>
-                </div>
+              <p><b>Pets:</b>
+                {% for pet in booking.pets.all %}
+                  {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
                 {% endfor %}
-            {% else %}
-                <p>No messages yet.</p>
-            {% endif %}
-        </aside>
-    </main>
+              </p>
 
-    <!-- Dropdown toggle script -->
+              <p><b>Dates:</b> {{ booking.start_date }} → {{ booking.end_date }}</p>
+              <p><b>Hours/day:</b> {{ booking.hours_per_day }}</p>
+              <p><b>Total:</b> ₱{{ booking.total_price }}</p>
+              <p><b>Status:</b> <span class="status {{ booking.status }}">{{ booking.status|title }}</span></p>
+            </div>
 
-    <script src="{% static 'js/pet_sitter_dashboard.js' %}"></script>
-    <form id="csrf-form" style="display:none;">
-        {% csrf_token %}
-    </form>
+            <div class="reservation-actions">
+              {% if booking.status == "pending" %}
+                <!-- kept data-id attribute and class names unchanged -->
+                <button class="accept-btn" data-id="{{ booking.id }}">✅ Accept</button>
+                <button class="decline-btn" data-id="{{ booking.id }}">❌ Decline</button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No service requests at the moment.</p>
+      {% endif %}
+    </section>
+
+    <!-- RIGHT COLUMN: Earnings & Messages (kept variables & loops) -->
+    <aside class="messages-section card">
+      <div class="earnings-card">
+        <h4>Earnings</h4>
+        <p class="earnings-amount">₱{{ total_earnings|default:"0.00" }}</p>
+        <p class="earnings-label">Total this month</p>
+      </div>
+
+      <hr style="margin:1.2rem 0;border:none;border-top:1px solid #eee;">
+
+      <h4>Recent Messages</h4>
+      {% if sitter_messages %}
+        {% for message in sitter_messages %}
+          <div class="message">
+            <img src="{% static 'assets/default_owner.jpg' %}" alt="{{ message.sender.username }}" class="message-photo">
+            <div class="message-text">
+              <p><b>{{ message.sender.username }}:</b> {{ message.preview }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No messages yet.</p>
+      {% endif %}
+    </aside>
+  </main>
+
+  <!-- keep your JS include intact -->
+  <script src="{% static 'js/pet_sitter_dashboard.js' %}"></script>
+
+  <!-- keep your csrf form exactly where it was -->
+  <form id="csrf-form" style="display:none;">
+    {% csrf_token %}
+  </form>
 </body>
 </html>
