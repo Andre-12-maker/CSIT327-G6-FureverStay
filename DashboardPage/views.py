@@ -5,6 +5,7 @@ from .models import Notification
 from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib import messages
+from django.shortcuts import render
 
 @login_required
 def dashboard(request):
@@ -73,3 +74,13 @@ def submit_review(request, sitter_id):
         return redirect('view_sitter_profile', sitter_id=sitter_id)
 
     return redirect('view_sitter_profile', sitter_id=sitter_id)
+# About us page view
+def about_us(request):
+    user_role = None
+    if request.user.is_authenticated:
+        try:
+            profile = Profile.objects.get(user=request.user)
+            user_role = profile.role  # 'sitter' or 'owner'
+        except Profile.DoesNotExist:
+            pass  # fallback: user has no profile
+    return render(request, 'about.html', {'user_role': user_role})

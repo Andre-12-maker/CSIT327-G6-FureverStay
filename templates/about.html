@@ -6,67 +6,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | FureverStay</title>
 
-    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
     <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}">
-
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
 </head>
+
 <body>
 
-    <!-- NAVBAR (same style as owner dashboard) -->
-    <nav class="navbar">
-        <div class="nav-left">
-            <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
-            <h1 class="brand">FureverStay</h1>
+<!-- ===================== NAVBAR ===================== -->
+<header class="navbar">
+    <div class="logo-section">
+        <img src="{% static 'assets/logo-removebg.png' %}" alt="FureverStay Logo" class="logo">
+    </div>
+
+    <nav class="nav-links">
+        {% if user_role == "sitter" %}
+            <a href="{% url 'pet_sitter_dashboard' %}">HOME</a>
+            <a href="{% url 'sitter_profile' %}">PROFILE</a>
+        {% else %}
+            <a href="{% url 'owner_dashboard' %}">HOME</a>
+            <a href="{% url 'owner_profile' %}">PROFILE</a>
+        {% endif %}
+        <a href="{% url 'about_us' %}" class="active">ABOUT US</a>
+    </nav>
+
+    <div class="user-menu">
+        <button class="dropdown-btn" id="userDropdown">
+            {{ request.user.first_name }} ▼
+        </button>
+        <div class="dropdown-content" id="dropdownContent">
+            {% if user_role == "sitter" %}
+                <a href="{% url 'sitter_profile' %}">My Profile</a>
+                <a href="#">My Bookings</a>
+                <a href="#">Settings</a>
+            {% else %}
+                <a href="{% url 'owner_profile' %}">My Profile</a>
+                <a href="#">My Pets</a>
+                <a href="#">Settings</a>
+            {% endif %}
+            <hr>
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
         </div>
+    </div>
 
-        <div class="nav-right">
-            <a href="/dashboard/">Dashboard</a>
-            <a href="/about/">About Us</a>
-            <a href="/contact/">Contact</a>
-
-            <div class="dropdown">
-                <button id="userDropdown">Profile ▼</button>
-                <div id="dropdownContent" class="dropdown-content">
-                    <a href="/profile/">My Profile</a>
-                    <a href="/logout/">Logout</a>
+    {% if user_role == "sitter" %}
+        <div class="notification-wrapper">
+            <div id="notifBell" class="notif-bell">
+                🔔<span id="notifCount" class="notif-count hidden">0</span>
+            </div>
+            <div class="notif-dropdown hidden" id="notifDropdown">
+                <ul id="notifList"></ul>
+                <div class="mark-all-container">
+                    <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
                 </div>
             </div>
         </div>
-    </nav>
+    {% endif %}
+</header>
 
-    <!-- MAIN CONTENT -->
-    <section class="about-wrapper">
+<!-- ===================== MAIN CONTENT ===================== -->
+<main class="about-wrapper">
 
-        <div class="about-card">
-            <h2>Our Mission</h2>
-            <p>
-                At FureverStay, our mission is to connect pet owners with trusted, 
-                reliable, and verified pet sitters who treat every pet like family.
-            </p>
-        </div>
-
-        <div class="about-card">
-            <h2>Who We Are</h2>
-            <p>
-                We are a passionate team dedicated to ensuring safe, convenient, 
-                and premium pet-care experiences. Whether you’re heading out for a trip 
-                or working long hours, we make sure your pets receive the attention 
-                they deserve.
-            </p>
-        </div>
-
-        <div class="about-card">
-            <h2>Why Choose Us</h2>
-            <ul>
-                <li>✔ Verified and Trusted Sitters</li>
-                <li>✔ Transparent Reviews and Profiles</li>
-                <li>✔ Safe, Secure, and Pet-Focused System</li>
-                <li>✔ Designed with love for pet parents</li>
-            </ul>
-        </div>
-
+    <section class="fancy-intro">
+        <h1>About FureverStay</h1>
+        <p>Your trusted partner in safe, loving, and reliable pet care.</p>
     </section>
 
-    <script src="{% static 'js/pet_owner_dashboard.js' %}"></script>
+    <div class="about-card">
+        <h2>Our Mission</h2>
+        <p>
+            At FureverStay, our mission is to connect pet owners with trusted, 
+            verified pet sitters who treat every pet like family.
+        </p>
+    </div>
+
+    <div class="about-card">
+        <h2>Who We Are</h2>
+        <p>
+            We are a passionate team dedicated to creating safe, convenient, 
+            and premium pet-care experiences. Whether you're working long hours 
+            or traveling, we ensure your pets get the care they deserve.
+        </p>
+    </div>
+
+    <div class="about-card">
+        <h2>Why Choose Us</h2>
+        <ul>
+            <li>✔ Verified and Trusted Sitters</li>
+            <li>✔ Transparent Reviews and Profiles</li>
+            <li>✔ Safe, Secure, and Pet-Focused System</li>
+            <li>✔ Built with love for pet parents everywhere</li>
+        </ul>
+    </div>
+
+</main>
+
+<!-- ===================== ROLE-BASED JS ===================== -->
+{% if user_role == "sitter" %}
+    <script src="{% static 'js/pet_sitter_dashboard.js' %}"></script>
+{% else %}
+    <script src="{% static 'js/owner_dashboardv2.js' %}"></script>
+{% endif %}
+
 </body>
 </html>
