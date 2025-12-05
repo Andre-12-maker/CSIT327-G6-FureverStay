@@ -4,106 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <title>Pet Sitter Profile</title>
+    <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/pet_sitter_profile.css' %}">
 </head>
 <body>
     <!-- Navbar -->
     <header class="navbar">
         <div class="logo-section">
-            <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo">
+            <img src="{% static 'assets/logo-removebg.png' %}" alt="FureverStay Logo" class="logo">
         </div>
 
-        <nav>
+        <nav class="nav-links">
             <a href="{% url 'pet_sitter_dashboard' %}">HOME</a>
             <a href="{% url 'sitter_profile' %}" class="active">PROFILE</a>
-            <a href="#">ABOUT US</a>
+            <a href="{% url 'about_us'%}">ABOUT US</a>
         </nav>
 
         <div class="user-menu">
             <button class="dropdown-btn" id="userDropdown">
-                {{ request.user.first_name }} <span class="arrow">▼</span>
+                {{ request.user.first_name }}<span class="arrow">▼</span>
             </button>
-            <div class="dropdown-content" id="dropdownContent"aria-hidden="true">
+            <div class="dropdown-content" id="dropdownContent" aria hidden="true">
                 <a href="{% url 'sitter_profile' %}">My Profile</a>
-                <a href="#">Bookings</a>
-                <a href="#">Messages</a>
-                <a href="#">Earnings</a>
-                <hr>
+                <a href="#">My Bookings</a>
+                <a href="#">Settings</a>
+                <hr />
                 <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+        </div>
+
+        <div class="notification-wrapper">
+            <div id="notifBell" class="notif-bell">
+                🔔<span id="notifCount" class="notif-count hidden">0</span>
+            </div>
+            <div class="notif-dropdown hidden" id="notifDropdown">
+                <ul id="notifList"></ul>
+                <div class="mark-all-container">
+                    <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Profile Content -->
     <main>
-    <section class="profile-wrapper">
-        <h2>My Profile</h2>
+        <section class="profile-wrapper">
+            <h2>My Profile</h2>
 
-        <form method="POST" enctype="multipart/form-data" class="profile-form">
-        {% csrf_token %}
+            <form method="POST" enctype="multipart/form-data" class="profile-form">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <!-- Left column: Profile image -->
+                    <div class="profile-image">
+                        {% if sitter_profile.profile_image_url %}
+                            <img src="{{ sitter_profile.profile_image_url }}" alt="Profile Picture">
+                        {% else %}
+                            <img src="{% static 'images/default_profile.png' %}" alt="Default">
+                        {% endif %}
+                        <input type="file" name="profile_image">
+                    </div>
 
-        <div class="profile-image">
-            {% if sitter_profile.profile_image_url %}
-                <img src="{{ sitter_profile.profile_image_url }}" alt="Profile Picture">
-            {% else %}
-                <img src="{% static 'images/default_profile.png' %}" alt="Default">
-            {% endif %}
-            <input type="file" name="profile_image">
-        </div>
+                    <!-- Right column: Form inputs -->
+                    <div class="form-fields">
+                        <p><b>Name:</b> {{ profile.first_name }} {{ profile.last_name }}</p>
+                        <p><b>Email:</b> {{ profile.email }}</p>
+                        <p><b>Address:</b> {{ profile.address }}</p>
 
-        <p><b>Name:</b> {{ profile.first_name }} {{ profile.last_name }}</p>
-        <p><b>Email:</b> {{ profile.email }}</p>
-        <p><b>Address:</b> {{ profile.address }}</p>
+                        <label><b>Bio:</b></label>
+                        <textarea name="bio" rows="3">{{ sitter_profile.bio }}</textarea>
 
-        <label><b>Bio:</b></label>
-        <textarea name="bio" rows="3">{{ sitter_profile.bio }}</textarea>
+                        <label><b>Availability:</b></label>
+                        <input type="text" name="availability" value="{{ sitter_profile.availability }}">
 
-        <label><b>Availability:</b></label>
-        <input type="text" name="availability" value="{{ sitter_profile.availability }}">
+                        <label><b>Hourly Rate:</b></label>
+                        <input type="number" name="hourly_rate" step="0.01" value="{{ sitter_profile.hourly_rate }}">
 
-        <label><b>Hourly Rate:</b></label>
-        <input type="number" name="hourly_rate" step="0.01" value="{{ sitter_profile.hourly_rate }}">
+                        <label><b>Experience (years):</b></label>
+                        <input type="number" name="experience_years" value="{{ sitter_profile.experience_years }}">
 
-        <label><b>Experience (years):</b></label>
-        <input type="number" name="experience_years" value="{{ sitter_profile.experience_years }}">
-
-        <button type="submit" class="save-btn">Save Changes</button>
-        </form>
-    </section>
-    <section class="reviews-section">
-        <h3>Reviews from Pet Owners</h3>
-        <p>Average rating: {{ avg_rating }} ⭐</p>
-
-        {% if reviews %}
-            {% for review in reviews %}
-                <div class="review-card">
-                    <p><b>{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}</b> - {{ review.rating }} ⭐</p>
-                    <p>{{ review.comment }}</p>
-                    <p class="review-date">{{ review.created_at|date:"M d, Y, h:i A" }}</p>
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
                 </div>
-            {% endfor %}
-        {% else %}
-            <p>No reviews yet.</p>
-        {% endif %}
-    </section>
+            </form>
+        </section>
+
+        <section class="reviews-section">
+            <h3>Reviews from Pet Owners</h3>
+            <p class="avg-rating">
+                Average rating: 
+                <span class="stars">
+                    {% for star in "★★★★★" %}
+                        {% if forloop.counter <= avg_rating|floatformat:0 %}
+                            <span class="star filled">★</span>
+                        {% else %}
+                            <span class="star">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                </span> ({{ avg_rating }})
+            </p>
+
+            {% if reviews %}
+                <div class="reviews-grid">
+                    {% for review in reviews %}
+                        <div class="review-card">
+                            <div class="review-header">
+                                <p class="reviewer-name">{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}</p>
+                                <p class="review-rating">
+                                    {% for star in "★★★★★" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <span class="star filled">★</span>
+                                        {% else %}
+                                            <span class="star">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <p class="review-comment">{{ review.comment }}</p>
+                            <p class="review-date">{{ review.created_at|date:"M d, Y" }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-reviews">No reviews yet.</p>
+            {% endif %}
+        </section>
     </main>
-
-
-    <script>
-        // Toggle dropdown when button is clicked
-        document.getElementById("userDropdown").addEventListener("click", function (e) {
-            e.stopPropagation(); // prevent closing immediately
-            document.getElementById("dropdownContent").classList.toggle("show");
-        });
-
-        // Close dropdown when clicking outside
-        window.addEventListener("click", function (e) {
-            const dropdown = document.getElementById("dropdownContent");
-            if (!e.target.closest(".user-menu")) {
-                dropdown.classList.remove("show");
-            }
-        });
-    </script>
-
+    <script src="{% static 'js/pet_sitter_dashboard.js' %}"></script>
 </body>
 </html>

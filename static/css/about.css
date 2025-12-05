@@ -21,7 +21,6 @@ body {
     color: var(--text-dark);
 }
 
-/* NAVBAR */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -121,31 +120,6 @@ body {
 .logout {
   color: #b23b3b;
   font-weight: bold;
-}
-/* NOTIFICATIONS */
-.notification-wrapper {
-    position: relative;
-    margin-left: 1rem;
-}
-
-.notif-bell {
-    cursor: pointer;
-    font-size: 22px;
-}
-
-.notif-count {
-    position: absolute;
-    top: -6px;
-    right: -10px;
-    background: red;
-    color: white;
-    padding: 2px 5px;
-    font-size: 12px;
-    border-radius: 50%;
-}
-
-.hidden {
-    display: none;
 }
 
 /* NOTIFICATIONS */
