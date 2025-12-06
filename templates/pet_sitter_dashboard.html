@@ -51,10 +51,10 @@
     <section class="calendar-card">
         <div class="calendar-tabs">
             <button class="tab-btn active" data-tab="calendar">Calendar</button>
-            <button class="tab-btn" data-tab="schedule">Schedule</button>
+            <button class="tab-btn" data-tab="scheduleTab">Schedule</button>
         </div>
 
-        <div class="calendar-content">
+        <div class="calendar-content tab-content" id="calendar">
             <div class="calendar-container">
                 <div class="calendar-header">
                 <button id="prevMonth">◀</button>
@@ -76,6 +76,42 @@
                 </p>
             </div>
         </div>
+        <!-- Schedule Tab (Accepted Bookings) -->
+        <div class="schedule-content tab-content hidden" id="scheduleTab">
+            <h3>📅 Accepted Bookings</h3>
+
+            {% if sitter_reservations %}
+                {% for booking in sitter_reservations %}
+                    {% if booking.status == "accepted" %}
+                    <div class="reservation-card schedule-card">
+                        
+                        <div class="reservation-info">
+                            <h4>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h4>
+
+                            <p><b>Pets:</b>
+                                {% for pet in booking.pets.all %}
+                                {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+
+                            <p><b>Dates:</b> {{ booking.start_date }} → {{ booking.end_date }}</p>
+                            <p><b>Total Price:</b> ₱{{ booking.total_price }}</p>
+                            <p><b>Status:</b> <span class="status accepted">Accepted</span></p>
+                        </div>
+
+                        <div class="reservation-actions">
+                            <button class="complete-btn" data-id="{{ booking.id }}">
+                                ✔ Mark as Completed
+                            </button>
+                        </div>
+
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No accepted bookings yet.</p>
+            {% endif %}
+        </div>        
     </section>
     <section class="reservations-section">
       <h3>📬 Service Requests</h3>

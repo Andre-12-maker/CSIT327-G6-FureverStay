@@ -11,7 +11,6 @@ urlpatterns = [
     path('dashboard/', include('DashboardPage.urls')),
     path('dashboard/owner/', include('PetOwnerDashboard.urls')),
     path('dashboard/sitter/', include('PetSitterDashboard.urls')),
-    path('dashboard/about/', include('AboutPage.urls')),
 ]
 
 if settings.DEBUG:

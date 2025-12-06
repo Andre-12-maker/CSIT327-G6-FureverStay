@@ -181,3 +181,26 @@ def update_booking_status(request):
         except Booking.DoesNotExist:
             return JsonResponse({"success": False, "error": "Booking not found"})
     return JsonResponse({"success": False, "error": "Invalid request"})
+
+@login_required
+def complete_booking(request):
+    if request.method == "POST":
+        booking_id = request.POST.get("booking_id")
+
+        try:
+            booking = Booking.objects.get(id=booking_id)
+
+            # only sitter can complete their bookings
+            if booking.sitter.sitter != request.user:
+                return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+
+            booking.status = "completed"
+            booking.save()
+
+            return JsonResponse({"success": True, "status": "completed"})
+
+        except Booking.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Booking not found"}, status=404)
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+

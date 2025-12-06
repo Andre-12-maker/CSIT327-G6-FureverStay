@@ -254,3 +254,38 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   loadNotifications();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const csrfToken = document.querySelector("#csrf-form input[name='csrfmiddlewaretoken']").value;
+
+    document.querySelectorAll(".complete-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            const bookingId = button.dataset.id;
+
+            fetch("/dashboard/sitter/complete-booking/", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                    booking_id: bookingId
+                }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    button.textContent = "✔ Completed";
+                    button.disabled = true;
+                    button.classList.add("completed");
+
+                    // Optional: visually remove card
+                    // button.closest(".schedule-card").remove();
+                } else {
+                    alert(data.error || "Could not complete booking.");
+                }
+            });
+        });
+    });
+});
