@@ -335,3 +335,19 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   loadNotifications();
 });
+ // Tab functionality
+const tabs = document.querySelectorAll('.dashboard-tab');
+const sections = document.querySelectorAll('.tab-section');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Remove active class from all tabs
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+
+    // Show corresponding section
+    const target = tab.getAttribute('data-tab');
+    sections.forEach(sec => sec.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
+});

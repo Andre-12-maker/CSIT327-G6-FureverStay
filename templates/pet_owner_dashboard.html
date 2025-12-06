@@ -28,8 +28,6 @@
       </button>
       <div class="dropdown-content hidden">
         <a href="{% url 'pet_owner_profile' %}">My Profile</a>
-        <a href="#">My Bookings</a>
-        <a href="#">Messages</a>
         <a href="#">Settings</a>
         <hr />
         <a href="{% url 'logout' %}" class="logout">Logout</a>
@@ -50,7 +48,7 @@
 
   <!-- MAIN DASHBOARD -->
   <main class="dashboard-container">
-    <!-- INTRO SECTION -->
+    <!-- Intro Section -->
     <section class="intro-section fancy-intro">
       <div class="intro-content">
         <h1>Welcome back, {{ request.user.first_name }}!</h1>
@@ -62,82 +60,96 @@
       </div>
     </section>
 
-    <!-- DASHBOARD GRID -->
-    <section class="dashboard-grid">
-      <!-- My Pets Card -->
-      <div class="dashboard-card">
-        <h2>🐾 My Pets</h2>
-        {% if pets %}
-        <ul>
-          {% for pet in pets %}
-          <li>{{ pet.pet_name }} - {{ pet.species }} ({{ pet.breed }})</li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p>You haven’t added any pets yet.</p>
-        {% endif %}
-        <button class="btn accent-btn">Add New Pet</button>
-      </div>
+    <!-- Tabs -->
+    <div class="dashboard-tabs">
+      <div class="dashboard-tab active" data-tab="pets">My Pets</div>
+      <div class="dashboard-tab" data-tab="search">Search</div>
+      <div class="dashboard-tab" data-tab="bookings">My Bookings</div>
+      <div class="dashboard-tab" data-tab="saved">Saved Sitters</div>
+    </div>
 
-      <!-- Find a Sitter Card (wide) -->
-      <div class="dashboard-card wide">
-        <h2>🔍 Find a Pet Sitter</h2>
-        <!-- Search Form -->
-        <form class="search-bar" id="searchForm">
-          <input type="text" id="locationInput" placeholder="Search by city or location" />
-          <input type="number" id="minPrice" placeholder="Min ₱/hr" min="0" />
-          <input type="number" id="maxPrice" placeholder="Max ₱/hr" min="0" />
-          <select id="availabilityFilter">
-            <option value="">Availability</option>
-            <option value="Weekdays">Weekdays</option>
-            <option value="Weekends">Weekends</option>
-          </select>
-          <select id="sortPrice">
-            <option value="">Sort by Price</option>
-            <option value="asc">Low → High</option>
-            <option value="desc">High → Low</option>
-          </select>
-          <button type="submit" class="search-btn">Search</button>
-        </form>
-        <!-- Results -->
-        <div class="results-grid" id="resultsGrid">
-          <p>Start by searching for pet sitters.</p>
+    <!-- Tab Sections -->
+    <div class="tab-sections">
+      <!-- My Pets -->
+      <div id="pets" class="tab-section active">
+        <div class="dashboard-card">
+          <h2>🐾 My Pets</h2>
+          {% if pets %}
+          <ul>
+            {% for pet in pets %}
+            <li>{{ pet.pet_name }} - {{ pet.species }} ({{ pet.breed }})</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>You haven’t added any pets yet.</p>
+          {% endif %}
+          <button class="btn accent-btn">Add New Pet</button>
         </div>
       </div>
 
-      <!-- My Bookings Card -->
-      <div class="dashboard-card">
-        <h2>📅 My Bookings</h2>
-        {% if bookings %}
-        <div class="booking-list">
-          {% for booking in bookings %}
-          <div class="booking-card">
-            <h4>{{ booking.sitter.sitter.first_name }} {{ booking.sitter.sitter.last_name }}</h4>
-            <p><strong>Dates:</strong> {{ booking.start_date }} → {{ booking.end_date }}</p>
-            <p><strong>Hours per Day:</strong> {{ booking.hours_per_day }}</p>
-            <p><strong>Pets:</strong>
-              {% for pet in booking.pets.all %}
-                {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </p>
-            <p><strong>Total:</strong> ₱{{ booking.total_price }}</p>
-            <span class="booking-status {{ booking.status }}">{{ booking.status|title }}</span>
+      <!-- Search Sitters -->
+      <div id="search" class="tab-section">
+        <div class="dashboard-card wide">
+          <h2>🔍 Search Sitters</h2>
+          <form class="search-bar" id="searchForm">
+            <input type="text" id="locationInput" placeholder="Search by city or location" />
+            <input type="number" id="minPrice" placeholder="Min ₱/hr" min="0" />
+            <input type="number" id="maxPrice" placeholder="Max ₱/hr" min="0" />
+            <select id="availabilityFilter">
+              <option value="">Availability</option>
+              <option value="Weekdays">Weekdays</option>
+              <option value="Weekends">Weekends</option>
+            </select>
+            <select id="sortPrice">
+              <option value="">Sort by Price</option>
+              <option value="asc">Low → High</option>
+              <option value="desc">High → Low</option>
+            </select>
+            <button type="submit" class="search-btn">Search</button>
+          </form>
+          <div class="results-grid" id="resultsGrid">
+            <p>Start by searching for pet sitters.</p>
           </div>
-          {% endfor %}
         </div>
-        {% else %}
-        <p>No bookings yet. Start by booking a sitter!</p>
-        {% endif %}
       </div>
 
-      <!-- Saved Sitters Card -->
-      <div class="dashboard-card">
-        <h2>❤️ Saved Sitters</h2>
-        <div class="saved-box" id="savedSittersBox">
-            <p>Loading saved sitters...</p>
+      <!-- My Bookings -->
+      <div id="bookings" class="tab-section">
+        <div class="dashboard-card">
+          <h2>📅 My Bookings</h2>
+          {% if bookings %}
+          <div class="booking-list">
+            {% for booking in bookings %}
+            <div class="booking-card">
+              <h4>{{ booking.sitter.sitter.first_name }} {{ booking.sitter.sitter.last_name }}</h4>
+              <p><strong>Dates:</strong> {{ booking.start_date }} → {{ booking.end_date }}</p>
+              <p><strong>Hours per Day:</strong> {{ booking.hours_per_day }}</p>
+              <p><strong>Pets:</strong>
+                {% for pet in booking.pets.all %}
+                  {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </p>
+              <p><strong>Total:</strong> ₱{{ booking.total_price }}</p>
+              <span class="booking-status {{ booking.status }}">{{ booking.status|title }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p>No bookings yet. Start by booking a sitter!</p>
+          {% endif %}
         </div>
       </div>
-    </section>
+
+      <!-- Saved Sitters -->
+      <div id="saved" class="tab-section">
+        <div class="dashboard-card">
+          <h2>❤️ Saved Sitters</h2>
+          <div class="saved-box" id="savedSittersBox">
+            <p>Loading saved sitters...</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
   <script>
     const fetchSittersURL = "/dashboard/owner/fetch_sitters/";

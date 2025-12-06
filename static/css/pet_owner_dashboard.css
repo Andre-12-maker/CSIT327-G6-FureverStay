@@ -586,3 +586,34 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
+/* Tabs for dashboard sections */
+.dashboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.dashboard-tab {
+  padding: 0.6rem 1.5rem;
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+.dashboard-tab.active {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* Hide sections by default */
+.tab-section {
+  display: none;
+}
+.tab-section.active {
+  display: block;
+}
