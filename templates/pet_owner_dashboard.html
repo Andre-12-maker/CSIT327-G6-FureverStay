@@ -74,16 +74,20 @@
       <div id="pets" class="tab-section active">
         <div class="dashboard-card">
           <h2>🐾 My Pets</h2>
-          {% if pets %}
-          <ul>
-            {% for pet in pets %}
-            <li>{{ pet.pet_name }} - {{ pet.species }} ({{ pet.breed }})</li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p>You haven’t added any pets yet.</p>
-          {% endif %}
-          <button class="btn accent-btn">Add New Pet</button>
+          <div class="pet-list">
+            {% if pets %}
+                {% for pet in pets %}
+                    <div class="pet-card">
+                        <h4>{{ pet.name }}</h4>
+                        <p><b>Species:</b> {{ pet.species }}</p>
+                        <p><b>Breed:</b> {{ pet.breed }}</p>
+                        <p><b>Age:</b> {{ pet.age }} years</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-pets">You have no pets added yet.</p>
+            {% endif %}
+          </div>
         </div>
       </div>
 

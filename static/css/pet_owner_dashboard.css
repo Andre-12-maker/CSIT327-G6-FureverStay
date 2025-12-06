@@ -617,3 +617,31 @@ body {
 .tab-section.active {
   display: block;
 }
+/* PET CARD STYLES */
+.pet-list {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 15px;
+}
+/* PET CARD STYLE */
+.pet-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pet-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+.pet-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+.no-pets {
+    font-style: italic;
+    opacity: 0.7;
+    margin-top: 1rem;
+}
