@@ -1,0 +1,288 @@
+:root {
+    --primary: #8B5E5E;
+    --secondary: #C28B7B;
+    --accent: #E5A4A4;
+    --light: #FAF3F3;
+    --white: #fff;
+    --text-dark: #4A2C2C;
+
+    --shadow-soft: rgba(0,0,0,0.10);
+    --shadow-mid: rgba(0,0,0,0.18);
+}
+
+/* RESETS */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom right, #fff8f8, #fdeeee);
+    color: var(--text-dark);
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: var(--white);
+  box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+.logo {
+  height: 100px;
+  width: 180px;
+}
+.nav-links {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--white);
+  margin: 0 1rem;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+/* USER MENU */
+.user-menu {
+  position: relative;
+  margin-left: auto;
+}
+
+.dropdown-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: var(--white);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.dropdown-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 45px;
+  background: var(--white);
+  color: var(--text-dark);
+  box-shadow: 0 6px 20px var(--card-shadow);
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  z-index: 10;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-content a {
+  padding: 0.8rem 1rem;
+  text-decoration: none;
+  color: var(--text-dark);
+  display: block;
+  transition: 0.3s;
+}
+
+.dropdown-content a:hover {
+  background: var(--accent);
+  color: var(--white);
+}
+
+.dropdown-content hr {
+  margin: 0;
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+.dropdown-content.show {
+  display: block;
+}
+
+.logout {
+  color: #b23b3b;
+  font-weight: bold;
+}
+
+/* NOTIFICATIONS */
+.notification-wrapper {
+  position: relative;
+  margin-right: 20px;
+}
+
+.notif-bell {
+  cursor: pointer;
+  font-size: 22px;
+  position: relative;
+}
+
+.notif-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  width: 260px;
+  max-height: 350px;
+  overflow-y: auto;
+  background: #fbeaea;
+  border: 1px solid #8b5e5e;
+  color: #8b5e5e;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.notif-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notif-item {
+  padding: 8px;
+  margin-top: 5px;
+  border-bottom: 1px solid #f8d7da;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.notif-item.unread {
+  background: #e5a4a4;
+  font-weight: bold;
+  color: white;
+}
+
+.mark-all-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.mark-all-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+.mark-all-btn:hover {
+  background: var(--secondary);
+}
+
+/* MAIN */
+.bookings-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  background: var(--white);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* BOOKING CARDS */
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.booking-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-left: 5px solid var(--primary);
+}
+
+.owner-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status.pending { background: #ffe7a3; }
+.status.accepted { background: #b7ffb7; }
+.status.declined { background: #ffb4b4; }
+.status.completed { background: #b3d6ff; }
+
+.no-bookings {
+  text-align: center;
+  font-style: italic;
+  margin-top: 2rem;
+}

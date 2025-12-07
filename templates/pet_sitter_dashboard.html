@@ -27,7 +27,7 @@
       </button>
       <div class="dropdown-content" id="dropdownContent" aria hidden="true">
         <a href="{% url 'sitter_profile' %}">My Profile</a>
-        <a href="#">My Bookings</a>
+        <a href="{% url 'sitter_bookings' %}">My Bookings</a>
         <a href="#">Settings</a>
         <hr />
         <a href="{% url 'logout' %}" class="logout">Logout</a>
@@ -114,44 +114,44 @@
         </div>        
     </section>
     <section class="reservations-section">
-      <h3>📬 Service Requests</h3>
+    <h3>📬 Service Requests</h3>
 
-      {% if sitter_reservations %}
-        {% for booking in sitter_reservations %}
-          <div class="reservation-card">
-            <!-- owner-photo kept -->
-            <img src="{% static 'assets/default_profile.png' %}"
-                 alt="{{ booking.owner.username }}"
-                 class="owner-photo">
+    {% if sitter_reservations %}
+      {% for booking in sitter_reservations %}
+        {% if booking.status == "pending" %}
+        <div class="reservation-card">
+          <img src="{% static 'assets/default_profile.png' %}"
+              alt="{{ booking.owner.username }}"
+              class="owner-photo">
 
-            <div class="reservation-info">
-              <h4>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h4>
+          <div class="reservation-info">
+            <h4>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h4>
 
-              <p><b>Pets:</b>
-                {% for pet in booking.pets.all %}
-                  {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-              </p>
+            <p><b>Pets:</b>
+              {% for pet in booking.pets.all %}
+                {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </p>
 
-              <p><b>Dates:</b> {{ booking.start_date }} → {{ booking.end_date }}</p>
-              <p><b>Hours/day:</b> {{ booking.hours_per_day }}</p>
-              <p><b>Total:</b> ₱{{ booking.total_price }}</p>
-              <p><b>Status:</b> <span class="status {{ booking.status }}">{{ booking.status|title }}</span></p>
-            </div>
-
-            <div class="reservation-actions">
-              {% if booking.status == "pending" %}
-                <!-- kept data-id attribute and class names unchanged -->
-                <button class="accept-btn" data-id="{{ booking.id }}">✅ Accept</button>
-                <button class="decline-btn" data-id="{{ booking.id }}">❌ Decline</button>
-              {% endif %}
-            </div>
+            <p><b>Dates:</b> {{ booking.start_date }} → {{ booking.end_date }}</p>
+            <p><b>Hours/day:</b> {{ booking.hours_per_day }}</p>
+            <p><b>Total:</b> ₱{{ booking.total_price }}</p>
+            <p><b>Status:</b> 
+              <span class="status pending">Pending</span>
+            </p>
           </div>
-        {% endfor %}
-      {% else %}
-        <p>No service requests at the moment.</p>
-      {% endif %}
-    </section>
+
+          <div class="reservation-actions">
+            <button class="accept-btn" data-id="{{ booking.id }}">✅ Accept</button>
+            <button class="decline-btn" data-id="{{ booking.id }}">❌ Decline</button>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <p>No pending service requests at the moment.</p>
+    {% endif %}
+  </section>
 
     <!-- RIGHT COLUMN: Earnings & Messages (kept variables & loops) -->
     <aside class="messages-section card">
@@ -163,19 +163,31 @@
 
       <hr style="margin:1.2rem 0;border:none;border-top:1px solid #eee;">
 
-      <h4>Recent Messages</h4>
-      {% if sitter_messages %}
-        {% for message in sitter_messages %}
-          <div class="message">
-            <img src="{% static 'assets/default_owner.jpg' %}" alt="{{ message.sender.username }}" class="message-photo">
-            <div class="message-text">
-              <p><b>{{ message.sender.username }}:</b> {{ message.preview }}</p>
+      <h4>Completed Services</h4>
+      {% for booking in sitter_reservations %}
+          {% if booking.status == "completed" %}
+            <div class="reservation-card">
+              <img src="{% static 'assets/default_profile.png' %}"
+                  alt="{{ booking.owner.username }}"
+                  class="owner-photo">
+
+              <div class="reservation-info">
+                <h4>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h4>
+
+                <p><b>Pets:</b>
+                  {% for pet in booking.pets.all %}
+                    {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </p>
+                <p>Finished: {{ booking.end_date }}</p>
+                <p>₱{{ booking.total_price }} earned</p>
+                <p><b>Status:</b> 
+                  <span class="status completed">Completed</span>
+                </p>
+              </div>
             </div>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p>No messages yet.</p>
-      {% endif %}
+          {% endif %}
+      {% endfor %}
     </aside>
   </main>
 

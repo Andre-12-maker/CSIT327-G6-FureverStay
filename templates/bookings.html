@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings | FureverStay</title>
+    <link rel="icon" type="image/png" href="{% static 'assets/icon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/bookings.css' %}">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+ <header class="navbar">
+    <div class="logo-section">
+      <img src="{% static 'assets/logo-removebg.png' %}" alt="FureverStay Logo" class="logo">
+    </div>
+
+    <nav class="nav-links">
+      <a href="{% url 'pet_sitter_dashboard' %}" class="active">HOME</a>
+      <a href="{% url 'sitter_profile' %}">PROFILE</a>
+      <a href="{% url 'about_us'%}">ABOUT US</a>
+    </nav>
+
+    <div class="user-menu">
+       <button class="dropdown-btn" id="userDropdown">
+        {{ request.user.first_name }}<span class="arrow">▼</span>
+      </button>
+      <div class="dropdown-content" id="dropdownContent" aria hidden="true">
+        <a href="{% url 'sitter_profile' %}">My Profile</a>
+        <a href="{% url 'sitter_bookings' %}">My Bookings</a>
+        <a href="#">Settings</a>
+        <hr />
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+      </div>
+    </div>
+    <div class="notification-wrapper">
+      <div id="notifBell" class="notif-bell">
+        🔔<span id="notifCount" class="notif-count hidden">0</span>
+      </div>
+      <div class="notif-dropdown hidden" id="notifDropdown">
+        <ul id="notifList"></ul>
+        <div class="mark-all-container">
+          <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
+        </div>
+      </div>
+    </div>
+ </header>
+
+<main class="bookings-container">
+    <h2>📘 My Bookings</h2>
+
+    <!-- FILTER OPTIONS -->
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="pending">Pending</button>
+        <button class="filter-btn" data-filter="accepted">Accepted</button>
+        <button class="filter-btn" data-filter="declined">Declined</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+    </div>
+
+    <!-- BOOKINGS LIST -->
+    <div class="bookings-list">
+        {% for booking in sitter_reservations %}
+        <div class="booking-card" data-status="{{ booking.status }}">
+            <img src="{% static 'assets/default_profile.png' %}" class="owner-photo">
+
+            <div class="booking-info">
+                <h3>{{ booking.owner.first_name }} {{ booking.owner.last_name }}</h3>
+
+                <p><b>Pets:</b>
+                    {% for pet in booking.pets.all %}
+                        {{ pet.pet_name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+
+                <p><b>Dates:</b> {{ booking.start_date }} → {{ booking.end_date }}</p>
+                <p><b>Hours/day:</b> {{ booking.hours_per_day }}</p>
+                <p><b>Total Price:</b> ₱{{ booking.total_price }}</p>
+
+                <p><b>Status:</b>
+                    <span class="status {{ booking.status }}">{{ booking.status|title }}</span>
+                </p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="no-bookings">No bookings available.</p>
+        {% endfor %}
+    </div>
+</main>
+
+<script>
+/* simple filtering (you can replace with your JS later) */
+const buttons = document.querySelectorAll(".filter-btn");
+const cards = document.querySelectorAll(".booking-card");
+
+buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        let filter = btn.dataset.filter;
+
+        cards.forEach(card => {
+            card.style.display =
+                filter === "all" || card.dataset.status === filter
+                ? "flex"
+                : "none";
+        });
+    });
+});
+</script>
+<script src="{% static 'js/pet_sitter_dashboard.js' %}"></script>
+
+</body>
+</html>

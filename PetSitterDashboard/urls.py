@@ -9,5 +9,5 @@ urlpatterns = [
     path('update-booking-status/', views.update_booking_status, name='update_booking_status'),
     path("<int:sitter_id>/availability/", views.fetch_sitter_availability, name="fetch_sitter_availability"),
     path("complete-booking/", views.complete_booking, name="complete_booking"),
-
+    path('bookings/', views.sitter_bookings, name='sitter_bookings'),
 ]

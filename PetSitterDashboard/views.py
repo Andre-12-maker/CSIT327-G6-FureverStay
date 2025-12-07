@@ -204,3 +204,14 @@ def complete_booking(request):
 
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
+@login_required
+def sitter_bookings(request):
+    sitter = request.user
+
+    reservations = Booking.objects.filter(
+        sitter__sitter=sitter
+    ).select_related("owner", "sitter").prefetch_related("pets").order_by("-start_date")
+
+    return render(request, "bookings.html", {
+        "sitter_reservations": reservations
+    })
