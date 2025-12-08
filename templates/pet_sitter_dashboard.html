@@ -9,42 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/pet_sitter_dashboard.css' %}">
 </head>
 <body>
-    <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="logo-section">
-      <img src="{% static 'assets/logo-removebg.png' %}" alt="FureverStay Logo" class="logo">
-    </div>
-
-    <nav class="nav-links">
-      <a href="{% url 'pet_sitter_dashboard' %}" class="active">HOME</a>
-      <a href="{% url 'sitter_profile' %}">PROFILE</a>
-      <a href="{% url 'about_us'%}">ABOUT US</a>
-    </nav>
-
-    <div class="user-menu">
-       <button class="dropdown-btn" id="userDropdown">
-        {{ request.user.first_name }}<span class="arrow">▼</span>
-      </button>
-      <div class="dropdown-content" id="dropdownContent" aria hidden="true">
-        <a href="{% url 'sitter_profile' %}">My Profile</a>
-        <a href="{% url 'sitter_bookings' %}">My Bookings</a>
-        <a href="#">Settings</a>
-        <hr />
-        <a href="{% url 'logout' %}" class="logout">Logout</a>
-      </div>
-    </div>
-    <div class="notification-wrapper">
-      <div id="notifBell" class="notif-bell">
-        🔔<span id="notifCount" class="notif-count hidden">0</span>
-      </div>
-      <div class="notif-dropdown hidden" id="notifDropdown">
-        <ul id="notifList"></ul>
-        <div class="mark-all-container">
-          <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
-        </div>
-      </div>
-    </div>
-  </header>
+  {% include 'navbar_sitter.html' %}
 
   <main class="dashboard">
     <!-- 📅 Calendar Section -->

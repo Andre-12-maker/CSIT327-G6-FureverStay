@@ -8,32 +8,7 @@
   <link rel="stylesheet" href="{% static 'css/view_sitter_profile.css' %}">
 </head>
 <body>
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="logo-section">
-      <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="logo" />
-    </div>
-
-    <nav class="nav-links">
-      <a href="{% url 'pet_owner_dashboard' %}">HOME</a>
-      <a href="#">PROFILE</a>
-      <a href="#">ABOUT US</a>
-    </nav>
-
-    <div class="user-menu">
-      <button id="dropdown-btn" class="dropdown-btn">
-        {{ request.user.first_name }} ▼
-      </button>
-      <div class="dropdown-content hidden">
-        <a href="#">My Profile</a>
-        <a href="#">My Bookings</a>
-        <a href="#">Messages</a>
-        <a href="#">Settings</a>
-        <hr />
-        <a href="{% url 'logout' %}" class="logout">Logout</a>
-      </div>
-    </div>
-  </header>
+  {% include 'navbar_owner.html' %}
 
   {% if error %}
     <p class="error">{{ error }}</p>

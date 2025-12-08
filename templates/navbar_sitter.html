@@ -1,0 +1,55 @@
+{%load static%}
+{% url 'pet_sitter_dashboard' as sitter_dashboard_url %}
+{% url 'sitter_profile' as sitter_profile_url %}
+{% url 'about_us' as about_url %}
+<link rel="stylesheet" href="{% static 'css/navbar_sitter.css' %}">
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo-section">
+        <img src="{% static 'assets/logo-removebg.png' %}" alt="FureverStay Logo" class="logo">
+    </div>
+
+    <nav class="nav-links">
+        <a 
+            href="{{ sitter_dashboard_url }}" 
+            class="{% if request.path == sitter_dashboard_url %}active{% endif %}">
+            HOME
+        </a>
+
+        <a 
+            href="{{ sitter_profile_url }}" 
+            class="{% if request.path == sitter_profile_url %}active{% endif %}">
+            PROFILE
+        </a>
+
+        <a 
+            href="{{ about_url }}" 
+            class="{% if request.path == about_url %}active{% endif %}">
+            ABOUT US
+        </a>
+    </nav>
+
+    <div class="user-menu">
+        <button class="dropdown-btn" id="userDropdown">
+        {{ request.user.first_name }}<span class="arrow">▼</span>
+        </button>
+        <div class="dropdown-content" id="dropdownContent" aria hidden="true">
+        <a href="{% url 'sitter_profile' %}">My Profile</a>
+        <a href="{% url 'sitter_bookings' %}">My Bookings</a>
+        <a href="#">Settings</a>
+        <hr />
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+        </div>
+    </div>
+    <div class="notification-wrapper">
+        <div id="notifBell" class="notif-bell">
+        🔔<span id="notifCount" class="notif-count hidden">0</span>
+        </div>
+        <div class="notif-dropdown hidden" id="notifDropdown">
+        <ul id="notifList"></ul>
+        <div class="mark-all-container">
+            <button id="markAllBtn" class="mark-all-btn">Mark all as read</button>
+        </div>
+        </div>
+    </div>
+</header>
