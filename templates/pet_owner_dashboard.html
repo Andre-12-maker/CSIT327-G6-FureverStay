@@ -87,10 +87,18 @@
       <div id="bookings" class="tab-section">
         <div class="dashboard-card">
           <h2>📅 My Bookings</h2>
+          <!-- FILTER OPTIONS -->
+          <div class="filter-bar" id="ownerFilterBar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="pending">Pending</button>
+            <button class="filter-btn" data-filter="accepted">Accepted</button>
+            <button class="filter-btn" data-filter="declined">Declined</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+          </div>
           {% if bookings %}
-          <div class="booking-list">
+          <div class="booking-list" id="ownerBookingList">
             {% for booking in bookings %}
-            <div class="booking-card">
+            <div class="booking-card" data-status="{{ booking.status }}">
               <h4>{{ booking.sitter.sitter.first_name }} {{ booking.sitter.sitter.last_name }}</h4>
               <p><strong>Dates:</strong> {{ booking.start_date }} → {{ booking.end_date }}</p>
               <p><strong>Hours per Day:</strong> {{ booking.hours_per_day }}</p>

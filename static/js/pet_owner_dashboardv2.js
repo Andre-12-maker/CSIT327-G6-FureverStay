@@ -260,19 +260,35 @@ function renderSavedSitters(list) {
         return;
     }
     box.innerHTML = list.map(s => {
-        const imgSrc = s.image && s.image !== "" 
-            ? s.image 
+        const imgSrc = s.image && s.image !== ""
+            ? s.image
             : "/static/assets/default_profile.png";
         return `
             <div class="saved-card">
                 <img src="${imgSrc}" class="saved-img" alt="Sitter Image">
                 <h4>${s.first_name} ${s.last_name}</h4>
-                <p>${s.address}</p>
+                <p>📍${s.address}</p>
                 <p>₱${s.hourly_rate}/hr</p>
-                <button class="remove-btn" data-id="${s.id}">Remove</button>
+                <div class="saved-actions">
+                    <button class="view-profile-btn" data-sitter-id="${s.id}">
+                        View Profile
+                    </button>
+                    <button class="remove-btn" data-id="${s.id}">
+                        Remove
+                    </button>
+                </div>
             </div>
         `;
     }).join("");
+    // Add click listeners for View Profile
+    document.querySelectorAll(".view-profile-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const sitterId = e.target.dataset.sitterId;
+            if (sitterId) {
+                window.location.href = `/dashboard/owner/view_sitter_profile/${sitterId}/`;
+            }
+        });
+    });
 }
 document.addEventListener("click", e => {
     const id = e.target.dataset.id;
@@ -370,3 +386,23 @@ if (findSitterBtn) {
     }
   });
 }
+  // Pet Owner Booking Filters
+  const filterButtons = document.querySelectorAll("#ownerFilterBar .filter-btn");
+  const ownerCards = document.querySelectorAll("#ownerBookingList .booking-card");
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      // button active state
+      filterButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      let filter = btn.dataset.filter;
+
+      ownerCards.forEach(card => {
+        card.style.display =
+          filter === "all" || card.dataset.status === filter
+          ? "block"
+          : "none";
+      });
+    });
+  });
