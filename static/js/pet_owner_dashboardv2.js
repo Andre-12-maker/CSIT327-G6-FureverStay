@@ -351,3 +351,22 @@ tabs.forEach(tab => {
     document.getElementById(target).classList.add('active');
   });
 });
+// Find a Sitter button
+const findSitterBtn = document.getElementById('findSitterBtn');
+
+if (findSitterBtn) {
+  findSitterBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    tabs.forEach(t => t.classList.remove('active'));
+    sections.forEach(sec => sec.classList.remove('active'));
+
+    const searchTab = document.querySelector('.dashboard-tab[data-tab="search"]');
+    const searchSection = document.getElementById('search');
+
+    if (searchTab && searchSection) {
+      searchTab.classList.add('active');
+      searchSection.classList.add('active');
+      searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}

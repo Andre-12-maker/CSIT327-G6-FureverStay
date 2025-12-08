@@ -181,6 +181,7 @@ body {
   cursor: pointer;
   transition: 0.3s;
   margin: 0 0 2rem 2rem;
+  text-decoration: none;
 }
 
 .save-btn {
@@ -356,7 +357,6 @@ body {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  text-decoration: none;
 }
 
 .btn.primary-btn {

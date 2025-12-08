@@ -5,14 +5,15 @@
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: var(--white);
   box-shadow: 0 4px 12px var(--card-shadow);
+  height: 120px;
   position: sticky; 
   top: 0;             
   z-index: 1000;  
 }
 
 .logo {
-  height: 100px;
-  width: 180px;
+  height: 100%;
+  width: 200px;
 }
 .nav-links {
   display: flex;
