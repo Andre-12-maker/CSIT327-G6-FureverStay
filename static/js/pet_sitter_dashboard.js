@@ -289,3 +289,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+function sortReviews() {
+    const value = document.getElementById("sortreviews").value;
+    const url = new URL(window.location.href);
+    url.searchParams.set("sort", value);
+    window.location.href = url.toString();
+}

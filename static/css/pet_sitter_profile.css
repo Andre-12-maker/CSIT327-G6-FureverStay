@@ -219,3 +219,42 @@ body {
     color: #888;
     font-style: italic;
 }
+.review-controls .custom-select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 180px; 
+}
+.review-controls .custom-select-wrapper select {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: var(--light);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    font-weight: 500;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.review-controls .custom-select-wrapper select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 5px var(--shadow-soft);
+}
+.review-controls .custom-select-wrapper::after {
+    content: "▼";
+    font-size: 0.7rem;
+    color: var(--accent);
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+.review-controls .custom-select-wrapper select:hover {
+    border-color: var(--secondary);
+}

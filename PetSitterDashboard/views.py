@@ -44,6 +44,15 @@ def sitter_profile(request):
     reviews = SitterReview.objects.filter(sitter_id=request.user.id).select_related('reviewer').order_by('-created_at')
     avg_rating = reviews.aggregate(avg=models.Avg("rating"))["avg"] or 0
     avg_rating = round(avg_rating, 1)
+    sort_option = request.GET.get("sort", "newest")
+    if sort_option == "newest":
+        reviews = reviews.order_by("-created_at")
+    elif sort_option == "oldest":
+        reviews = reviews.order_by("created_at")
+    elif sort_option == "highest":
+        reviews = reviews.order_by("-rating")
+    elif sort_option == "lowest":
+        reviews = reviews.order_by("rating")
     if request.method == "POST":
         sitter_profile.bio = request.POST.get("bio", "")
         sitter_profile.availability = request.POST.get("availability", "")
@@ -77,6 +86,7 @@ def sitter_profile(request):
         "profile": profile,
         "reviews": reviews,
         "avg_rating": avg_rating,
+        "sort": sort_option,
     }
     return render(request, "pet_sitter_profile.html", context)
 

@@ -54,6 +54,17 @@
 
         <section class="reviews-section">
             <h3>Reviews from Pet Owners</h3>
+            <div class="review-controls">
+                <label for="sortreviews"><b>Sort:</b></label>
+                <div class="custom-select-wrapper">
+                    <select id="sortreviews" onchange="sortReviews()">
+                        <option value="newest" {% if sort == "newest" %}selected{% endif %}>Newest First</option>
+                        <option value="oldest" {% if sort == "oldest" %}selected{% endif %}>Oldest First</option>
+                        <option value="highest" {% if sort == "highest" %}selected{% endif %}>Highest Rated</option>
+                        <option value="lowest" {% if sort == "lowest" %}selected{% endif %}>Lowest Rated</option>
+                    </select>
+                </div>
+            </div>
             <p class="avg-rating">
                 Average rating: 
                 <span class="stars">
