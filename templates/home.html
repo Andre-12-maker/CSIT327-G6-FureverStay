@@ -4,12 +4,12 @@
 {% block title %}Home | FureverStay{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% include 'navbar_home.html' %}
 
 <!-- HERO SECTION -->
 <section class="hero-section">
   <div class="hero-container">
-
-    <!-- LEFT ICON -->
     <div class="hero-left">
       <img src="{% static 'assets/icon-removebg.png' %}" alt="Pet Icon" class="hero-icon">
       <div class="hero-rating">
@@ -19,13 +19,10 @@
       </div>
     </div>
 
-    <!-- RIGHT CONTENT -->
     <div class="hero-right">
       <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo" class="hero-logo">
       <p class="hero-description">
-        Welcome to <strong>FureverStay</strong> — the ultimate home-away-from-home for your beloved pets. 
-        From playful pups to curious cats, we offer safe, loving, and affordable stays with experienced pet sitters. 
-        Every booking ensures your furry friend receives personalized care, comfort, and plenty of love.
+        Welcome to <strong>FureverStay</strong> — the ultimate home-away-from-home for your beloved pets. Safe, loving, and affordable stays with trusted sitters.
       </p>
       <a href="{% url 'login' %}" class="book-now-btn">BOOK NOW</a>
       <div class="hero-images">
@@ -33,8 +30,52 @@
         <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6" alt="Cat" class="pet-image">
       </div>
     </div>
-
   </div>
 </section>
+
+<!-- ABOUT US SECTION -->
+<section class="about-section">
+  <div class="about-container">
+    <h2>About Us</h2>
+    <p>
+      FureverStay is dedicated to giving pets a secure and loving temporary home. Our mission is to connect owners with trusted, verified sitters who provide premium care with heart. Whether you're traveling or busy, your pet stays happy, active, and cared for.
+    </p>
+  </div>
+</section>
+
+<!-- MISSION & VISION SECTION -->
+<section class="vision-mission-section">
+  <div class="vision-mission-card">
+    <h3>Our Mission</h3>
+    <p>
+      To provide pets with a safe, loving, and comfortable temporary home, while building trust and connection between owners and verified sitters. Every stay should feel like family care.
+    </p>
+  </div>
+  <div class="vision-mission-card">
+    <h3>Our Vision</h3>
+    <p>
+      To become the most trusted and loved platform for pet stays worldwide, ensuring every pet has a happy, healthy, and cared-for experience, no matter where their owners are.
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <h3>FureverStay</h3>
+      <p>Your pet’s second home — trusted by thousands of owners and sitters.</p>
+    </div>
+
+    <div class="footer-right">
+      <ul>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/faq">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2025 FureverStay. All rights reserved.</p>
+</footer>
 
 {% endblock %}

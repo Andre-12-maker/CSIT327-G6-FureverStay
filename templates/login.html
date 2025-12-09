@@ -5,6 +5,7 @@
 
 {% block content %}
 <!-- LOGIN MODAL -->
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 <div id="loginModal" class="modal login-modal">
   <div class="modal-content">
       <a href="{% url 'home' %}" class="close-modal">✖</a>
@@ -42,4 +43,3 @@
     });
   </script>
 {% endblock %}
-

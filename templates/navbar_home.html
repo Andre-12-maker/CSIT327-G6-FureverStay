@@ -1,0 +1,15 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/navbar_home.css' %}">
+<nav class="navbar-home">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">
+      <img src="{% static 'assets/logo.png' %}" alt="FureverStay Logo">
+    </a>
+
+    <div class="header-buttons nav-auth">
+      <button id="loginBtn" data-url="{% url 'login' %}">LOGIN</button>
+      <button id="registerBtn" data-url="{% url 'register' %}">REGISTER</button>
+    </div>
+  </div>
+</nav>
+

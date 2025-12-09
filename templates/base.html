@@ -9,12 +9,7 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-  <header class="header">
-    <div class="header-buttons">
-      <button id="loginBtn" data-url="{% url 'login' %}">LOGIN</button>
-      <button id="registerBtn" data-url="{% url 'register' %}">REGISTER</button>
-    </div>
-  </header>
+  <!-- header removed: auth buttons are provided by page-specific navbars -->
 
   {% block content %}{% endblock %}
 

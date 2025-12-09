@@ -1,0 +1,45 @@
+/* Home navbar styles that complement the hero */
+.navbar-home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 80;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.08));
+  padding: 14px 0;
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+.nav-logo img {
+  height: 72px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));
+}
+/* center links removed for home - show auth buttons on right */
+.nav-auth { display: flex; gap: 12px }
+.nav-auth button { cursor: pointer }
+
+/* Ensure header-buttons styles (from global CSS) apply inside navbar */
+.nav-container .header-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* Hide the default header (login/register) on the homepage so the navbar handles branding */
+.navbar-home + * .header,
+.navbar-home ~ .header,
+.navbar-home .header {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .nav-container { padding: 0 12px }
+  .nav-logo img { height: 56px }
+  .nav-container .header-buttons button { padding: 0.5rem 0.9rem }
+}
+
