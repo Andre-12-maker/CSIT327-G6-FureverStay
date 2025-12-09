@@ -12,6 +12,10 @@ body {
   font-family: "Poppins", sans-serif;
   background: var(--light);
   color: var(--text-dark);
+  background-image: url("../assets/background.jpg");
+  background-repeat: repeat;      
+  background-size: auto;           
+  background-position: top left;
 }
 
 /* Profile container */
@@ -23,13 +27,8 @@ body {
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
-.sitter-header img {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--accent);
-}
+
+/* Profile Header */
 .profile-header {
   display: flex;
   align-items: center;
@@ -50,47 +49,19 @@ body {
   color: var(--primary);
   margin: 0;
 }
+
 .profile-info p {
   margin: 0.3rem 0;
   font-size: 1rem;
 }
 
-.bio-section {
-  margin-top: 1.5rem;
-}
-.bio-section h3 {
-  color: var(--secondary);
-  margin-bottom: 0.5rem;
-}
-
-/* Calendar placeholder */
-.availability-calendar {
-  margin-top: 1.5rem;
-  text-align: center;
-  background: var(--light);
-  border-radius: 12px;
-  padding: 1.2rem;
-  box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
-}
-
-/* Book button */
-.book-btn {
-  display: block;
-  margin: 1.8rem auto 0;
-  background: var(--secondary);
-  color: var(--white);
-  border: none;
-  border-radius: 10px;
-  padding: 0.8rem 2rem;
+.rate {
   font-size: 1.1rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  color: var(--secondary);
 }
 
-.book-btn:hover {
-  background: var(--accent);
-}
+/* Availability Section */
 .availability-section {
   background: var(--white);
   padding: 1.5rem;
@@ -137,6 +108,7 @@ body {
   color: #1b4332;
   font-weight: 600;
 }
+
 .calendar td.unavailable {
   background: #fed7d7;
   color: #888;
@@ -144,6 +116,23 @@ body {
 }
 
 /* Booking Modal */
+.book-btn {
+  display: block;
+  margin: 1.8rem auto 0;
+  background: var(--secondary);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.book-btn:hover {
+  background: var(--accent);
+}
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -210,11 +199,12 @@ body {
   font-weight: 600;
   color: #2c3e50;
 }
-/* PET LIST ALIGNMENT */
+
+/* Pet List */
 .pet-list {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* spacing between each pet row */
+  gap: 8px;
   margin-top: 8px;
 }
 
@@ -238,31 +228,19 @@ body {
   color: var(--text-dark);
   font-weight: 500;
 }
+
+/* Reviews Section */
+.reviews-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
 h4 {
   color: var(--primary);
   margin-bottom: 1rem;
   text-align: center;
-}
-
-.rate {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--secondary);
-}
-
-.error {
-  text-align: center;
-  color: #e74c3c;
-  font-weight: bold;
-  margin-top: 1rem;
-}
-
-.reviews-section {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .average-rating {
@@ -271,7 +249,7 @@ h4 {
 }
 
 .average-rating .stars {
-  color: gold;
+  color: var(--accent);
   margin-left: 10px;
 }
 
@@ -279,6 +257,7 @@ h4 {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 1.5rem;
 }
 
 .review-card {
@@ -296,41 +275,93 @@ h4 {
   font-size: 0.8rem;
   color: #888;
 }
-.submit-review-section {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+.error {
+  text-align: center;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 1rem;
 }
 
-.submit-review-section form {
+/* Leave Review Section */
+.leave-review-container {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border-left: 6px solid var(--secondary);
+}
+
+.leave-review-container h5 {
+  margin-bottom: 1rem;
+  color: var(--primary);
+  text-align: center;
+}
+
+.leave-review-container .cannot-review-msg {
+  text-align: center;
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.leave-review-container form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.submit-review-section select,
-.submit-review-section textarea {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  width: 100%;
+.stars-input {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #ccc;
+  margin-bottom: 8px;
 }
 
-.submit-review-btn {
+.stars-input .star.selected {
+  color: var(--accent);
+}
+
+.leave-review-container textarea {
+  width: 100%;
+  min-height: 100px;
   padding: 10px;
-  background: #00a8ff;
-  color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 1rem;
+}
+
+.leave-review-btn {
+  background: var(--secondary);
+  color: var(--white);
   border: none;
   border-radius: 8px;
+  padding: 10px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
   transition: 0.3s;
 }
 
-.submit-review-btn:hover {
-  background: #0085cc;
+.leave-review-btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
 }
 
+.review-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 6px;
+}
+.review-rating .star {
+    font-size: 1rem;
+    color: #ccc; 
+}
 
+.review-rating .star.filled {
+    color: var(--accent); 
+}

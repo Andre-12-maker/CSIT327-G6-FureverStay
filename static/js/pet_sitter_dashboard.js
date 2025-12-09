@@ -280,8 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     button.disabled = true;
                     button.classList.add("completed");
 
-                    // Optional: visually remove card
-                    // button.closest(".schedule-card").remove();
+                    button.closest(".schedule-card").remove();
                 } else {
                     alert(data.error || "Could not complete booking.");
                 }

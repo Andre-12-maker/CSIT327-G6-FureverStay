@@ -113,30 +113,29 @@ body, html {
   width: 380px;
   height: 173px;
   object-fit: cover;
-  margin: 0;
+  margin: 0 auto 1rem;
 }
 
 .hero-description {
   font-size: 1.2rem;
   color: white;
   margin: 10px 0;
-  max-width: 500px;
+  max-width: 694px;
 }
 
 .book-now-btn {
-  width: 154px;
-  height: 46px;
-  border-radius: 7px;
-  background-color: #b87c7c;
-  border: none;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 15px 0;
+    display: inline-block;
+    padding: 0.9rem 1.5rem;
+    border-radius: 10px;
+    background-color: #b87c7c;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease;
 }
 
 .book-now-btn:hover {
-  background-color: #a56b6b;
+    background-color: #a56b6b;
 }
 
 .hero-images {
@@ -631,10 +630,12 @@ body, html {
   right: 20px;
   font-size: 17px;
   color: var(--btn-color);
+  text-decoration: none;
 }
 
 .close-modal:hover {
   color: var(--btn-hover);
+  text-decoration: none;
 }
 
 /* === Responsive Adjustments for Login === */

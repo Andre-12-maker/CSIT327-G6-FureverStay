@@ -50,10 +50,9 @@
         </table>
       </div>
     </section>
-    <!-- Reviews Section -->
-    <section class="reviews-section">
+    <!-- Reviews & Leave Review Section -->
+    <section class="reviews-card">
       <h4>Reviews & Ratings</h4>
-      
       <!-- Average Rating -->
       <div class="average-rating">
         <strong>Average Rating:</strong> {{ avg_rating }} / 5
@@ -73,7 +72,16 @@
         {% if reviews %}
           {% for review in reviews %}
             <div class="review-card">
-              <p><strong>{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}</strong> - {{ review.rating }} ★</p>
+              <p><strong>{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}</strong></p>
+              <div class="review-rating">
+                  {% for star in "★★★★★" %}
+                      {% if forloop.counter <= review.rating %}
+                          <span class="star filled">★</span>
+                      {% else %}
+                          <span class="star">☆</span>
+                      {% endif %}
+                  {% endfor %}
+              </div>
               <p>{{ review.comment }}</p>
               <p class="review-date">{{ review.created_at|date:"M d, Y" }}</p>
             </div>
@@ -82,33 +90,38 @@
           <p>No reviews yet.</p>
         {% endif %}
       </div>
-    </section>
-    <!-- Submit Review Section -->
-    <section class="submit-review-section">
-      <h4>Leave a Review</h4>
-      
-      {% if request.user.id != sitter_id %}
-      <form method="POST" action="{% url 'submit_review' sitter_id %}">
-        {% csrf_token %}
-        
-        <label for="rating">Rating:</label>
-        <select name="rating" id="rating" required>
-          <option value="">Select rating</option>
-          <option value="1">1 ★</option>
-          <option value="2">2 ★</option>
-          <option value="3">3 ★</option>
-          <option value="4">4 ★</option>
-          <option value="5">5 ★</option>
-        </select>
 
-        <label for="comment">Comment:</label>
-        <textarea name="comment" id="comment" rows="3" placeholder="Write your review here..."></textarea>
+      <!-- Leave Review Section -->
+      <div class="leave-review-container">
+        <h5>Leave a Review</h5>
 
-        <button type="submit" class="submit-review-btn">Submit Review</button>
-      </form>
-      {% else %}
-        <p>You cannot review yourself.</p>
-      {% endif %}
+        {% if request.user.id == sitter_id %}
+          <p class="cannot-review-msg">❌ You cannot review yourself.</p>
+
+        {% elif not has_completed_booking %}
+          <p class="cannot-review-msg">⚠️ You can only leave a review after completing a booking with this sitter.</p>
+
+        {% else %}
+          <form method="POST" action="{% url 'submit_review' sitter_id %}">
+            {% csrf_token %}
+
+            <!-- Star Rating -->
+            <div class="stars-input" id="star-rating">
+              <span class="star" data-value="1">&#9733;</span>
+              <span class="star" data-value="2">&#9733;</span>
+              <span class="star" data-value="3">&#9733;</span>
+              <span class="star" data-value="4">&#9733;</span>
+              <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <input type="hidden" name="rating" id="rating-value" value="5">
+
+            <textarea name="review_text" placeholder="Write your experience..." required></textarea>
+            <button type="submit" class="leave-review-btn">Submit Review</button>
+
+            <p class="review-note">Your feedback helps other pet owners ❤️</p>
+          </form>
+        {% endif %}
+      </div>
     </section>
 
   </main>

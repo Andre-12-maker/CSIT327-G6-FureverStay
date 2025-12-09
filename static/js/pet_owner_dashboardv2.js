@@ -406,3 +406,19 @@ if (findSitterBtn) {
       });
     });
   });
+document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll("#star-rating .star");
+    const ratingValue = document.getElementById("rating-value");
+
+    stars.forEach((star, index) => {
+        star.addEventListener("click", () => {
+            const rating = star.dataset.value;
+            ratingValue.value = rating;
+
+            stars.forEach((s, i) => {
+                if (i < rating) s.classList.add("selected");
+                else s.classList.remove("selected");
+            });
+        });
+    });
+});

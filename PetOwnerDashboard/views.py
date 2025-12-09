@@ -147,6 +147,11 @@ def view_sitter_profile(request, sitter_id):
     reviews = SitterReview.objects.filter(sitter_id=sitter_id).select_related("reviewer").order_by("-created_at")
     avg_rating = reviews.aggregate(avg=models.Avg("rating"))["avg"] or 0
     avg_rating = round(avg_rating, 1)
+    has_completed_booking = Booking.objects.filter(
+        sitter__sitter_id=sitter_id,
+        owner=request.user,
+        status="completed"
+    ).exists()
     context = {
         "profile": profile,
         "sitter_profile": sitter_profile,
@@ -154,6 +159,7 @@ def view_sitter_profile(request, sitter_id):
         "sitter_id": sitter_id,
         "reviews": reviews,        
         "avg_rating": avg_rating,
+        "has_completed_booking": has_completed_booking,
     }
     return render(request, "view_sitter_profile.html", context)
 
@@ -318,3 +324,39 @@ def pet_owner_profile(request):
     }
 
     return render(request, "pet_owner_profile.html", context)
+
+@login_required
+def submit_review(request, sitter_id):
+    sitter = get_object_or_404(User, id=sitter_id)
+
+    # ❗ Owners can only leave a review after completing a booking
+    has_completed = Booking.objects.filter(
+        sitter__sitter_id=sitter_id,
+        owner=request.user,
+        status="completed"
+    ).exists()
+
+    if not has_completed:
+        messages.error(request, "You can only leave a review after completing a booking with this sitter.")
+        return redirect("view_sitter_profile", sitter_id=sitter_id)
+
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+        comment = request.POST.get("review_text")
+
+        if not rating:
+            messages.error(request, "Please select a rating.")
+            return redirect("view_sitter_profile", sitter_id=sitter_id)
+
+        SitterReview.objects.create(
+            sitter_id=sitter_id,
+            reviewer=request.user,
+            rating=rating,
+            comment=comment
+        )
+
+        messages.success(request, "Review submitted successfully!")
+        return redirect("view_sitter_profile", sitter_id=sitter_id)
+
+    return redirect("view_sitter_profile", sitter_id=sitter_id)
+
